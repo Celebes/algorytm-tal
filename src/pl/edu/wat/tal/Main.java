@@ -9,8 +9,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		System.out.println("HELLO WORLD");
-		
 		// wczytaj podany w parametrze uruchomieniowym plik
 		if(args.length > 0) {
 			File file = new File(args[0]);
