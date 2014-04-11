@@ -23,6 +23,9 @@ public class Main {
 					// rob cos dalej z grafem..
 					
 					
+					// zapisz graf do pliku .tgf
+					tgfHelper.convertGraphToTgf(graf);
+					
 				} else {
 					System.err.println("B³êdne rozszerzenie pliku! Dopuszczalne s¹ tylko pliki .tgf!");
 				}

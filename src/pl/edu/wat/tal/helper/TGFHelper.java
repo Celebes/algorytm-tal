@@ -1,12 +1,12 @@
 package pl.edu.wat.tal.helper;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import pl.edu.wat.tal.graf.Graf;
 import pl.edu.wat.tal.graf.Krawedz;
@@ -59,6 +59,43 @@ public class TGFHelper {
 		}
 		
 		return graf;
+	}
+
+	public void convertGraphToTgf(Graf graf) {
+		String newFileName = file.getName().replace(".tgf", "") + "_converted.tgf";
+		File newFile = new File(file.getAbsolutePath().replace(file.getName(), "") + "\\" + newFileName);
+		
+		try {
+			
+			if(!newFile.exists()) {
+				newFile.createNewFile();
+			}
+			
+			FileWriter fw = new FileWriter(newFile.getAbsoluteFile());
+			BufferedWriter bw = new BufferedWriter(fw);
+			
+			// zapisz wierzcholki
+			
+			for(Wierzcholek w : graf.getWierzcholki()) {
+				bw.write(w.getNumer() + " " + w.getNazwa() + "\n");
+			}
+			
+			bw.write("#\n");
+			
+			// zapisz krawedzie
+			
+			for(Krawedz k : graf.getKrawedzie()) {
+				bw.write(k.getA().getNumer() + " " + k.getB().getNumer() + "\n");
+			}
+			
+			bw.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			System.out.println("Pomyslnie zapisano plik: " + newFile.getAbsolutePath());
+		}
+
 	}
 
 }
