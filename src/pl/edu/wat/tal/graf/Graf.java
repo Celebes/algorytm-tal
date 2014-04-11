@@ -41,4 +41,24 @@ public class Graf {
 		return result;
 	}
 
+	public void createWierzcholekFromLine(String line) {
+		String[] liniaPoPodziale = line.split(" ");
+		
+		Wierzcholek w = new Wierzcholek(Integer.parseInt(liniaPoPodziale[0]), liniaPoPodziale[1]);
+		wierzcholki.add(w);
+		
+		System.out.println("Do grafu dodano wierzcholek: " + w);
+	}
+
+	public void createKrawedzFromLine(String line) {
+		String[] liniaPoPodziale = line.split(" ");
+		int numerWierzcholkaA = Integer.parseInt(liniaPoPodziale[0]);
+		int numerWierzcholkaB = Integer.parseInt(liniaPoPodziale[1]);
+		
+		Krawedz k = new Krawedz(findWierzcholekByNumer(numerWierzcholkaA), findWierzcholekByNumer(numerWierzcholkaB));
+		krawedzie.add(k);
+		
+		System.out.println("Do grafu dodano krawedz: " + k);
+	}
+
 }
