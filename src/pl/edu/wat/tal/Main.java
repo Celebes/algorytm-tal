@@ -21,6 +21,8 @@ public class Main {
 					Graf graf = tgfHelper.parseTgfFile();
 					
 					// rob cos dalej z grafem..
+					//System.out.println(graf.getCyclomaticNumber());
+					//System.out.println(graf.getCyclomaticNumberWithoutVertex(2));
 					
 					
 					// zapisz graf do pliku .tgf
