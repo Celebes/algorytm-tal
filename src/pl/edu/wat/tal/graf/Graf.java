@@ -74,7 +74,7 @@ public class Graf {
 	 * Wylicza liczbe cyklomatyczna dla grafu pozbawionego wybranego wierzcholka
 	 */
 	public int getCyclomaticNumberWithoutVertex(int numerWierzcholka) {
-		Graf temp = this;
+		Graf temp = this.klonuj();
 		temp.removeWierzcholek(numerWierzcholka);
 		return temp.getCyclomaticNumber();
 	}
@@ -103,6 +103,33 @@ public class Graf {
 				break;
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Graf posiada " + this.wierzcholki.size() + " wierzcholkow (" + this.wierzcholki + ") i " + this.krawedzie.size() + " krawedzi (" + this.krawedzie + ")";
+	}
+
+	public Graf klonuj() {
+		Graf g = new Graf();
+		List<Wierzcholek> w = new ArrayList<Wierzcholek>();
+		List<Krawedz> k = new ArrayList<Krawedz>();
+		
+		for(Wierzcholek wierzcholek : wierzcholki) {
+			Wierzcholek temp = new Wierzcholek(wierzcholek.getNumer(), wierzcholek.getNazwa());
+			w.add(temp);
+		}
+		
+		g.setWierzcholki(w);
+		
+		for(Krawedz krawedz : krawedzie) {
+			Krawedz temp = new Krawedz(g.findWierzcholekByNumer(krawedz.getA().getNumer()), g.findWierzcholekByNumer(krawedz.getB().getNumer()));
+			k.add(temp);
+		}
+		
+		g.setKrawedzie(k);
+		
+		return g;
 	}
 
 }

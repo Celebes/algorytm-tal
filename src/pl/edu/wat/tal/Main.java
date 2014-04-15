@@ -1,8 +1,12 @@
 package pl.edu.wat.tal;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import pl.edu.wat.tal.algorytmy.AlgorytmBruteForce;
 import pl.edu.wat.tal.graf.Graf;
+import pl.edu.wat.tal.graf.Wierzcholek;
 import pl.edu.wat.tal.helper.TGFHelper;
 
 public class Main {
@@ -21,8 +25,8 @@ public class Main {
 					Graf graf = tgfHelper.parseTgfFile();
 					
 					// rob cos dalej z grafem..
-					//System.out.println(graf.getCyclomaticNumber());
-					//System.out.println(graf.getCyclomaticNumberWithoutVertex(2));
+					AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
+					abf.compute();
 					
 					
 					// zapisz graf do pliku .tgf

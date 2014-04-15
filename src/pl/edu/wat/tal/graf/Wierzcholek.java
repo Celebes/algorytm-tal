@@ -28,7 +28,7 @@ public class Wierzcholek {
 
 	@Override
 	public String toString() {
-		return "[numer: " + numer + " | nazwa: " + nazwa + "]";
+		return String.valueOf(numer);
 	}
 
 }
