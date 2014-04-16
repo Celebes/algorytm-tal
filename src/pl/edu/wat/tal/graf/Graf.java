@@ -31,6 +31,14 @@ public class Graf {
 		this.krawedzie = krawedzie;
 	}
 	
+	public void addWierzcholek(Wierzcholek w) {
+		wierzcholki.add(w);
+	}
+	
+	public void addKrawedz(Krawedz k) {
+		krawedzie.add(k);
+	}
+	
 	public Set<Wierzcholek> pobierzWszystkichSasiadowWierzcholka(Wierzcholek w) {
 		Set<Wierzcholek> sasiedzi = new HashSet<Wierzcholek>();
 		

@@ -45,6 +45,29 @@ public class Krawedz {
 		this.waga = waga;
 	}
 	
+	
+	/*
+	 * Jesli wierzcholek a = 1, a wierzcholek b = 2, to wywolanie 'zwrocDrugiWierzcholek(1)' zwroci 2
+	 */
+	public Wierzcholek zwrocDrugiWierzcholek(Wierzcholek w) {
+		if(w.equals(a)) {
+			return b;
+		} else if(w.equals(b)) {
+			return a;
+		} else {
+			return null;
+		}
+	}
+	
+	public boolean zawieraWierzcholek(Wierzcholek w) {
+		
+		if(w.equals(a) || w.equals(b)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) {
