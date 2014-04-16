@@ -31,4 +31,27 @@ public class Wierzcholek {
 		return String.valueOf(numer);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) {
+			return false;
+		}
+		
+		if(this.getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		final Wierzcholek other = (Wierzcholek)obj;
+		
+		if(!this.nazwa.equals(other.getNazwa())) {
+			return false;
+		}
+		
+		if(this.numer != other.numer) {
+			return false;
+		}
+		
+		return true;
+	}
+
 }

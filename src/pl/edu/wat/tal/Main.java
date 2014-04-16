@@ -1,13 +1,8 @@
 package pl.edu.wat.tal;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import pl.edu.wat.tal.algorytmy.AlgorytmBruteForce;
-import pl.edu.wat.tal.graf.Graf;
-import pl.edu.wat.tal.graf.Wierzcholek;
-import pl.edu.wat.tal.helper.TGFHelper;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Main {
 	
@@ -21,16 +16,15 @@ public class Main {
 				if(file.getName().endsWith(".tgf")) {
 					
 					// jesli wszystko OK to sparsuj plik
-					TGFHelper tgfHelper = new TGFHelper(file);
-					Graf graf = tgfHelper.parseTgfFile();
+					//TGFHelper tgfHelper = new TGFHelper(file);
+					//Graf graf = tgfHelper.parseTgfFile();
 					
 					// rob cos dalej z grafem..
-					AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
-					abf.compute();
-					
+					//AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
+					//abf.compute();					
 					
 					// zapisz graf do pliku .tgf
-					tgfHelper.convertGraphToTgf(graf);
+					// tgfHelper.convertGraphToTgf(graf);
 					
 				} else {
 					System.err.println("B³êdne rozszerzenie pliku! Dopuszczalne s¹ tylko pliki .tgf!");

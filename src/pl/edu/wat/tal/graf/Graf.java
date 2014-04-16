@@ -1,8 +1,10 @@
 package pl.edu.wat.tal.graf;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class Graf {
 	private List<Wierzcholek> wierzcholki;
@@ -27,6 +29,22 @@ public class Graf {
 
 	public void setKrawedzie(List<Krawedz> krawedzie) {
 		this.krawedzie = krawedzie;
+	}
+	
+	public Set<Wierzcholek> pobierzWszystkichSasiadowWierzcholka(Wierzcholek w) {
+		Set<Wierzcholek> sasiedzi = new HashSet<Wierzcholek>();
+		
+		for(Krawedz k : krawedzie) {
+			if(k.getA().equals(w)) {
+				sasiedzi.add(k.getB());
+			}
+			
+			if(k.getB().equals(w)) {
+				sasiedzi.add(k.getA());
+			}
+		}
+		
+		return sasiedzi;
 	}
 	
 	public Wierzcholek findWierzcholekByNumer(int numer) {

@@ -18,7 +18,7 @@ public class Krawedz {
 
 	@Override
 	public String toString() {
-		return "[KrawêdŸ dwukierunkowa pomiêdzy wierzcho³kiem [" + a.getNumer() + "] i [" + b.getNumer() + "] o wadze [" + waga + "]";
+		return "[" + a.getNumer() + "]<--->[" + b.getNumer() + "]";
 	}
 
 	public Wierzcholek getA() {
@@ -43,6 +43,25 @@ public class Krawedz {
 
 	public void setWaga(int waga) {
 		this.waga = waga;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null) {
+			return false;
+		}
+		
+		if(this.getClass() != obj.getClass()) {
+			return false;
+		}
+		
+		final Krawedz other = (Krawedz)obj;
+		
+		if((this.getA() == other.getA() && this.getB() == other.getB()) || (this.getA() == other.getB() && this.getB() == other.getA())) {
+			return true;
+		}
+		
+		return false;
 	}
 
 }
