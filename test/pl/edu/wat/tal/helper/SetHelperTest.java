@@ -1,10 +1,10 @@
 package pl.edu.wat.tal.helper;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.junit.After;
@@ -184,6 +184,36 @@ public class SetHelperTest {
 		spodziewanyWynik.add(2);
 		
 		assertTrue(SetHelper.iloczynZbiorow(a, b).equals(spodziewanyWynik));
+	}
+	
+	@Test
+	public void testGenerujWszystkiePodzbiory() {
+		Set<Integer> a = new HashSet<Integer>();
+		
+		a.add(1);
+		a.add(2);
+		
+		Set<Set<Integer>> podzbiory = SetHelper.generujWszystkiePodzbiory(a);
+		
+		// wygenerowane podzbiory zbioru a={1,2}, to: {}, {1}, {2}, {1,2}
+		
+		Set<Integer> a0 = new HashSet<Integer>();
+		
+		Set<Integer> a1 = new HashSet<Integer>();
+		a1.add(1);
+		
+		Set<Integer> a2 = new HashSet<Integer>();
+		a2.add(2);
+		
+		Set<Integer> a3 = new HashSet<Integer>();
+		a3.add(1);
+		a3.add(2);
+		
+		assertTrue(podzbiory.size() == 4);
+		assertTrue(podzbiory.contains(a0));
+		assertTrue(podzbiory.contains(a1));
+		assertTrue(podzbiory.contains(a2));
+		assertTrue(podzbiory.contains(a3));
 	}
 
 }

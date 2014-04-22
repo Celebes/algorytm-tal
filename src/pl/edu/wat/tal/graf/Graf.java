@@ -74,7 +74,7 @@ public class Graf {
 		Wierzcholek w = new Wierzcholek(Integer.parseInt(liniaPoPodziale[0]), liniaPoPodziale[1]);
 		wierzcholki.add(w);
 		
-		System.out.println("Do grafu dodano wierzcholek: " + w);
+		//System.out.println("Do grafu dodano wierzcholek: " + w);
 	}
 
 	public void createKrawedzFromLine(String line) {
@@ -85,7 +85,7 @@ public class Graf {
 		Krawedz k = new Krawedz(findWierzcholekByNumer(numerWierzcholkaA), findWierzcholekByNumer(numerWierzcholkaB));
 		krawedzie.add(k);
 		
-		System.out.println("Do grafu dodano krawedz: " + k);
+		//System.out.println("Do grafu dodano krawedz: " + k);
 	}
 	
 	/*

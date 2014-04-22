@@ -1,8 +1,9 @@
 package pl.edu.wat.tal;
 
 import java.io.File;
-import java.util.Set;
-import java.util.TreeSet;
+
+import pl.edu.wat.tal.algorytmy.AlgorytmBruteForce;
+import pl.edu.wat.tal.graf.Graf;
 
 public class Main {
 	
@@ -20,8 +21,22 @@ public class Main {
 					//Graf graf = tgfHelper.parseTgfFile();
 					
 					// rob cos dalej z grafem..
-					//AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
-					//abf.compute();					
+					Graf graf = new Graf();
+					graf.createWierzcholekFromLine("1 a");
+					graf.createWierzcholekFromLine("2 b");
+					graf.createWierzcholekFromLine("3 c");
+					graf.createWierzcholekFromLine("4 d");
+					
+					graf.createKrawedzFromLine("1 2");
+					graf.createKrawedzFromLine("2 3");
+					graf.createKrawedzFromLine("2 4");
+					graf.createKrawedzFromLine("3 4");
+					
+					AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
+					abf.compute();
+					
+					// to tylko do testow - uzywac zamiast tego metody compute()!
+					abf.computeZlozonePamieciowo();
 					
 					// zapisz graf do pliku .tgf
 					// tgfHelper.convertGraphToTgf(graf);

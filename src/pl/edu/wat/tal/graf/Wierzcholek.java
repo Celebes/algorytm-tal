@@ -28,7 +28,8 @@ public class Wierzcholek {
 
 	@Override
 	public String toString() {
-		return String.valueOf(numer);
+		//return String.valueOf(numer);
+		return nazwa;
 	}
 
 	@Override

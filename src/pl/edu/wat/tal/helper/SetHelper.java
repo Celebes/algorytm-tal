@@ -1,6 +1,8 @@
 package pl.edu.wat.tal.helper;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /*
@@ -40,6 +42,29 @@ public class SetHelper {
 		}
 		
 		return false;
+	}
+	
+	public static <T> Set<Set<T>> generujWszystkiePodzbiory(Set<T> zbiorWejsciowy) {
+		Set<Set<T>> podzbiory = new HashSet<Set<T>>();
+		
+		if(zbiorWejsciowy.isEmpty()) {
+			podzbiory.add(new HashSet<T>());
+			return podzbiory;
+		}
+		
+		List<T> list = new ArrayList<T>(zbiorWejsciowy);
+		T head = list.get(0);
+		Set<T> rest = new HashSet<T>(list.subList(1, list.size()));
+		
+		for(Set<T> zbior : generujWszystkiePodzbiory(rest)) {
+			Set<T> nowyZbior = new HashSet<T>();
+			nowyZbior.add(head);
+			nowyZbior.addAll(zbior);
+			podzbiory.add(nowyZbior);
+			podzbiory.add(zbior);
+		}
+		
+		return podzbiory;
 	}
 	
 }
