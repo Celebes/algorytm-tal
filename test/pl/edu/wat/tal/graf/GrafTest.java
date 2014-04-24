@@ -207,5 +207,33 @@ public class GrafTest {
 		
 		assertTrue(set.isEmpty());
 	}
+	
+	@Test
+	public void testZnajdzSpojneSkladoweGrafu() {
+		Graf g = new Graf();
+		
+		g.createWierzcholekFromLine("1 1");
+		g.createWierzcholekFromLine("2 2");
+		g.createWierzcholekFromLine("3 3");
+		g.createWierzcholekFromLine("4 4");
+		g.createWierzcholekFromLine("5 5");
+		
+		g.createKrawedzFromLine("1 2");
+		
+		g.createKrawedzFromLine("3 4");
+		g.createKrawedzFromLine("4 5");
+		g.createKrawedzFromLine("5 3");
+		
+		/*Set<Set<Wierzcholek>> spojneSkladowe = g.znajdzSpojneSkladowe();
+		
+		for(Set<Wierzcholek> sw : spojneSkladowe) {
+			System.out.println(sw);
+		}*/
+		
+		System.out.println(g.iloscSpojnychSkladowych());
+		System.out.println(g.iloscSpojnychSkladowych());
+		
+		assertTrue(true);
+	}
 
 }

@@ -1,7 +1,9 @@
 package pl.edu.wat.tal.algorytmy;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,13 +96,12 @@ public class AlgorytmBruteForce {
 	 * Dzieki temu nie trzeba przeszukiwac bezsensownie duzych podzbiorow, gdy znalazlo sie juz minimalny zbior rozcyklajacy
 	 */
 	public void compute() {
+		
+		boolean znalezionoFVS = false;
+		
 		// zaczynamy od maski z samych zer, wiec po prostu pusty zbior
 		// wielkosc maski = ilosc wierzcholkow, bo bedzie 2^n zbiorow
 		boolean[] maska = new boolean[this.graf.getWierzcholki().size()];
-		
-		// warunek stopu to maska zawierajace same TRUE
-		boolean[] warunekStopu = new boolean[this.graf.getWierzcholki().size()];
-		Arrays.fill(warunekStopu, Boolean.TRUE);
 				
 		// zaczynamy od zbiorow 0-elementowych (pusty), pozniej wszystkich 1-elementowych itp..
 		int liczbaElementowPodzbioru = 0;
@@ -108,15 +109,26 @@ public class AlgorytmBruteForce {
 		// zbior wszystkich zbiorow z liczba cyklometryczna <= 0
 		Set<Set<Wierzcholek>> acykliczne;
 		
-		while(true) {
+		// maska z iloscia wierzcholkow w grafie
+		int block_mask = element0(this.graf.getWierzcholki().size());
+		
+		// dla kazdej mozliwej liczby wierzcholkow w podzbiorze k, gdzie k = 0, 1, ... ilosc_wierzcholkow 
+		for(int i=0; i<(this.graf.getWierzcholki().size()); i++) {
 			// dla kazdej liczby elementow w podzbiorze tworzymy nowy zbior acyklicznych zbiorow
 			acykliczne = new HashSet<Set<Wierzcholek>>();
 			
-			// warunek zwiekszenia liczby elementow w podzbiorze
-			boolean[] warunekZwiekszeniaLiczbyElementowWPodzbiorze = generujWarunekZwiekszeniaLiczbyElementowWPodzbiorze(liczbaElementowPodzbioru);
+			// inicjalna maska - sluzy do generowania kolejnych permutacji
+			int subsetPermutationMask = element0(liczbaElementowPodzbioru);
 			
-			// dla kazdego k-elementowego podzbioru..
-			while(true) {
+			// ilosc podzbiorow istniejaca dla danego k
+			long iloscMozliwychPodzbiorowKElementowych = obliczIloscMozliwychPodzbiorowKElementowych(liczbaElementowPodzbioru);
+			
+			// dla kazdego k-elementowego podzbioru, gdzie k = 0, 1, ... ilosc_wierzcholkow
+			for(long j=0; j<iloscMozliwychPodzbiorowKElementowych; j++) {
+
+				// oblicz maske na podstawie wygenerowanej permutacji. Metoda, ktora pozyskuje ustawione bity na podstawie subsetPermutationMask
+				maska = generujNowaMaskeNaPodstawiePermutacji(subsetPermutationMask);
+				
 				// pobierz wierzcholki na podstawie maski
 				Set<Wierzcholek> wierzcholkiNaPodstawieMaski = pobierzZbiorWierzcholkowNaPodstawieMaski(maska);
 				
@@ -128,31 +140,33 @@ public class AlgorytmBruteForce {
 					acykliczne.add(wierzcholkiNaPodstawieMaski);
 				}
 				
-				// wygeneruj nastepny podzbior
-				maska = generujNastepnyPodzbior(maska);
-				
-				if(Arrays.equals(maska, warunekZwiekszeniaLiczbyElementowWPodzbiorze)) {
+				// dla 0 istnieje tylko zbior pusty, wiec nie ma potrzeby generowania jego permutacji
+				if(subsetPermutationMask == 0) {
 					break;
 				}
+				
+				// wygeneruj nastepny podzbior
+				subsetPermutationMask = nextPerm(subsetPermutationMask) & block_mask;
 			}
 			
 			// sprawdz czy mamy rozwiazanie
 			if(acykliczne.size() > 0) {
-				System.out.println("ZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
+				System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
 				System.out.println("ROZMIAR ZBIORU [FVS] TO: " + liczbaElementowPodzbioru);
 				
-				System.out.println("\n***\nLISTA MINIMALNYCH ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
+				System.out.println("\nLISTA MINIMALNYCH ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
 				
 				for(Set<Wierzcholek> s : acykliczne) {
 					System.out.println(s);
 				}
 				
-				//break;
+				znalezionoFVS = true;
+				break;
+			} else {
+				System.out.println("\nDLA PODZBIORÓW O LICZBIE ELEMENTÓW [" + liczbaElementowPodzbioru + "] NIE ZNALEZIONO [FVS]");
 			}
 			
-			if(Arrays.equals(maska, warunekStopu)) {
-				break;
-			}
+			System.out.println("\n*****************************************************");
 			
 			// zwieksz liczbe elementow w podzbiorze
 			liczbaElementowPodzbioru++;
@@ -160,43 +174,63 @@ public class AlgorytmBruteForce {
 			// generuj nowa maske dla tylu elementow
 			maska = generujMaskeDlaDanejLiczbyElementowPodzbioru(liczbaElementowPodzbioru);
 		}
+		
+		if(!znalezionoFVS) {
+			System.out.println("Zbiór [FVS] pokrywa siê ze wszystkimi " + liczbaElementowPodzbioru + " wierzcho³kami grafu i jest nastêpuj¹cy: ");
+			System.out.println(this.graf.getWierzcholki());
+		}
 	}
 	
-	public boolean[] generujNastepnyPodzbior(boolean[] maska) {
-		boolean[] wynik = Arrays.copyOf(maska, maska.length);
+	public long obliczIloscMozliwychPodzbiorowKElementowych(int liczbaElementowPodzbioru) {
+		int iloscZer = this.graf.getWierzcholki().size() - liczbaElementowPodzbioru;
+		return obliczPermutacjeBezPowtorzen(iloscZer, liczbaElementowPodzbioru);
+	}
+	
+	public long obliczPermutacjeBezPowtorzen(int zero, int jeden) {
+		return silnia(zero + jeden) / (silnia(zero) * silnia(jeden));
+	}
+	
+	public long silnia(int x) {
+		BigInteger result = BigInteger.ONE;
+		BigInteger n = BigInteger.valueOf((long)x);
 		
-		// znajdz najblizszy TRUE poprzedzony przez co najmniej jeden FALSE
-		int indeksPierwszegoTrue = -1;
-		int falseCounter = 0;
+		while (!n.equals(BigInteger.ZERO)) {
+	        result = result.multiply(n);
+	        n = n.subtract(BigInteger.ONE);
+	    }
 		
-		for(int i=0; i<maska.length; i++) {
-			if(maska[i] == true) {
-				if(falseCounter == 0) {
-					continue;
-				} else {
-					indeksPierwszegoTrue = i;
-					break;
-				}
-			} else {
-				falseCounter++;
-			}
-		}
+		return result.longValue();
+	}
+
+	public boolean[] generujNowaMaskeNaPodstawiePermutacji(int subsetPermutationMask) {
+		boolean[] wynik = new boolean[this.graf.getWierzcholki().size()];
+		BitSet bs = fromInt(subsetPermutationMask);
 		
-		// idac od indeksu pierwszego TRUE, ktory mozna przerzucic w lewo, znajdz indeks pierwszego FALSE, z ktorym sie zamieni miejscami
-		int indeksPierwszegoFalseZLewej = -1;
-		for(int i=indeksPierwszegoTrue; i >= 0; i--) {
-			if(maska[i] == false) {
-				indeksPierwszegoFalseZLewej = i;
-				break;
-			}
-		}
-		
-		if(indeksPierwszegoFalseZLewej != (-1)) {
-			wynik[indeksPierwszegoFalseZLewej] = true;
-			wynik[indeksPierwszegoTrue] = false;
+		for(int i=bs.nextSetBit(0); i>=0; i=bs.nextSetBit(i+1)) {
+			wynik[i] = true;
 		}
 		
 		return wynik;
+	}
+
+	public static int nextPerm(int v) {
+		int t = (v | (v-1)) + 1;
+		int w = t | ((((t & -t) / (v & -v)) >> 1) - 1);
+		return w;
+	}
+	
+	public static int element0(int c) {
+		return (1 << c) - 1;
+	}
+	
+	public BitSet fromInt(int num) {
+	    BitSet bs = new BitSet();
+	    for (int k = 0; k < Integer.SIZE; k++) {
+	        if (((num >> k) & 1) == 1) {
+	            bs.set(k);
+	        }
+	    }
+	    return bs;
 	}
 	
 	public boolean[] generujMaskeDlaDanejLiczbyElementowPodzbioru(int liczbaElementowPodzbioru) {

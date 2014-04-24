@@ -10,6 +10,9 @@ public class Graf {
 	private List<Wierzcholek> wierzcholki;
 	private List<Krawedz> krawedzie;
 	
+	private Set<Set<Wierzcholek>> spojneSkladowe;
+	private boolean[] odwiedzone;
+	
 	public Graf() {
 		wierzcholki = new ArrayList<Wierzcholek>();
 		krawedzie = new ArrayList<Krawedz>();
@@ -93,7 +96,7 @@ public class Graf {
 	 * cyc(G) = |E| - |V| + 1
 	 */
 	public int getCyclomaticNumber() {
-		return (this.getKrawedzie().size() - this.getWierzcholki().size() + 1);
+		return (this.getKrawedzie().size() - this.getWierzcholki().size() + this.iloscSpojnychSkladowych());
 	}
 	
 	/*
@@ -156,6 +159,55 @@ public class Graf {
 		g.setKrawedzie(k);
 		
 		return g;
+	}
+	
+	public int iloscSpojnychSkladowych() {
+		if(spojneSkladowe == null) {
+			return znajdzSpojneSkladowe().size();
+		} else {
+			return spojneSkladowe.size();
+		}
+	}
+	
+	public Set<Set<Wierzcholek>> znajdzSpojneSkladowe() {
+		spojneSkladowe = new HashSet<Set<Wierzcholek>>();
+		odwiedzone = new boolean[this.wierzcholki.size()];
+		
+		for(Wierzcholek w : wierzcholki) {
+			int indeksAktualnego = wierzcholki.indexOf(w);
+			if(odwiedzone[indeksAktualnego] == false) {
+				odwiedzone[indeksAktualnego] = true;
+				
+				Set<Wierzcholek> nowaSpojnaSkladowa = new HashSet<Wierzcholek>();
+				
+				nowaSpojnaSkladowa.add(w);
+				dfs(nowaSpojnaSkladowa, w);
+				
+				spojneSkladowe.add(nowaSpojnaSkladowa);
+			}
+		}
+		
+		return spojneSkladowe;
+	}
+
+	private void dfs(Set<Wierzcholek> nowaSpojnaSkladowa, Wierzcholek w) {
+		Set<Wierzcholek> sasiedzi = pobierzWszystkichSasiadowWierzcholka(w);
+		
+		for(Wierzcholek sasiad : sasiedzi) {
+			int indeksSasiada = wierzcholki.indexOf(sasiad);
+			if(odwiedzone[indeksSasiada] == false) {
+				odwiedzone[indeksSasiada] = true;
+				
+				nowaSpojnaSkladowa.add(sasiad);
+				
+				dfs(nowaSpojnaSkladowa, sasiad);
+			}
+		}
+	}
+
+	public boolean areAllTrue(boolean[] array) {
+	    for(boolean b : array) if(!b) return false;
+	    return true;
 	}
 
 }
