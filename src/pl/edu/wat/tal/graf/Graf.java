@@ -244,7 +244,7 @@ public class Graf {
 		
 		for(Integer integer : lista) {
 			Wierzcholek w = wierzcholki.get(i);
-			w.setWaga(lista.get(i) + 1);
+			w.setWaga(lista.get(i));
 			i++;
 		}
 		
