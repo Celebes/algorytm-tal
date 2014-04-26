@@ -2,7 +2,9 @@ package pl.edu.wat.tal;
 
 import java.io.File;
 
+import pl.edu.wat.tal.algorytmy.AlgorytmBranching;
 import pl.edu.wat.tal.algorytmy.AlgorytmBruteForce;
+import pl.edu.wat.tal.algorytmy.AlgorytmLayering;
 import pl.edu.wat.tal.graf.Graf;
 import pl.edu.wat.tal.helper.TGFHelper;
 
@@ -20,6 +22,9 @@ public class Main {
 					// jesli wszystko OK to sparsuj plik
 					TGFHelper tgfHelper = new TGFHelper(file);
 					Graf graf = tgfHelper.parseTgfFile();
+					graf.przyporzadkujLosoweWagi();
+					
+					System.out.println(graf);
 					
 					// rob cos dalej z grafem..
 					/*Graf graf = new Graf();
@@ -31,10 +36,17 @@ public class Main {
 					graf.createKrawedzFromLine("1 2");
 					graf.createKrawedzFromLine("2 3");
 					graf.createKrawedzFromLine("2 4");
-					graf.createKrawedzFromLine("3 4");*/
+					graf.createKrawedzFromLine("3 4");
+					
+					graf.przyporzadkujLosoweWagi();*/
 					
 					AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
 					abf.compute();
+					
+					System.out.println("\n*****************************************************");
+					
+					AlgorytmLayering al = new AlgorytmLayering(graf);
+					al.compute();
 					
 					// to tylko do testow - uzywac zamiast tego metody compute()!
 					//abf.computeZlozonePamieciowo();

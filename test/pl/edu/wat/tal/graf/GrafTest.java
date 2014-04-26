@@ -224,16 +224,59 @@ public class GrafTest {
 		g.createKrawedzFromLine("4 5");
 		g.createKrawedzFromLine("5 3");
 		
-		/*Set<Set<Wierzcholek>> spojneSkladowe = g.znajdzSpojneSkladowe();
-		
-		for(Set<Wierzcholek> sw : spojneSkladowe) {
-			System.out.println(sw);
-		}*/
-		
 		System.out.println(g.iloscSpojnychSkladowych());
 		System.out.println(g.iloscSpojnychSkladowych());
 		
 		assertTrue(true);
+	}
+	
+	@Test
+	public void testGetCyclomaticNumberDecreaseAfterRemovingVertex() {
+		Graf g = new Graf();
+		
+		g.createWierzcholekFromLine("1 1");
+		g.createWierzcholekFromLine("2 2");
+		g.createWierzcholekFromLine("3 3");
+		g.createWierzcholekFromLine("4 4");
+		g.createWierzcholekFromLine("5 5");
+		g.createWierzcholekFromLine("6 6");
+		
+		g.createKrawedzFromLine("1 2");
+		g.createKrawedzFromLine("2 3");
+		g.createKrawedzFromLine("2 4");
+		g.createKrawedzFromLine("3 4");
+		g.createKrawedzFromLine("4 5");
+		g.createKrawedzFromLine("4 6");
+		
+		// taki graf ma liczbe cyklomatyczna == 1
+		assertTrue(g.getCyclomaticNumber() == 1);
+		
+		// po usunieciu wierzcholka numer 3 ma liczbe cyklomatyczna == 0
+		assertTrue(g.getCyclomaticNumberWithoutVertex(3) == 0);
+		
+		// czyli spadek liczby cyklomatycznej po usunieciu wierzcholka numer 3 == 1
+		assertTrue(g.getCyclomaticNumberDecreaseAfterRemovingVertex(3) == 1);
+	}
+	
+	@Test
+	public void cyklomatycznaTest2() {
+		Graf g = new Graf();
+		
+		g.createWierzcholekFromLine("1 1");
+		
+		assertTrue(g.getCyclomaticNumber() == 0);
+	}
+	
+	@Test
+	public void cyklomatycznaTest3() {
+		Graf g = new Graf();
+		
+		g.createWierzcholekFromLine("1 1");
+		g.createWierzcholekFromLine("2 2");
+		
+		g.createKrawedzFromLine("1 2");
+		
+		assertTrue(g.getCyclomaticNumber() == 0);
 	}
 
 }

@@ -4,6 +4,8 @@ public class Wierzcholek {
 	
 	private int numer;
 	private String nazwa;
+	private double waga;
+	private boolean posiadaWage = false;
 
 	public Wierzcholek(int numer, String nazwa) {
 		this.numer = numer;
@@ -28,8 +30,25 @@ public class Wierzcholek {
 
 	@Override
 	public String toString() {
-		//return String.valueOf(numer);
-		return nazwa;
+		//return "[" + numer + "|" + nazwa + "|" + waga + "]";
+		return "(" + numer + "|" + waga + ")";
+	}
+
+	public double getWaga() {
+		return waga;
+	}
+
+	public void setWaga(double waga) {
+		this.waga = waga;
+		this.posiadaWage = true;
+	}
+
+	public boolean isPosiadaWage() {
+		return posiadaWage;
+	}
+
+	public void setPosiadaWage(boolean posiadaWage) {
+		this.posiadaWage = posiadaWage;
 	}
 
 	@Override
@@ -50,6 +69,16 @@ public class Wierzcholek {
 		
 		if(this.numer != other.numer) {
 			return false;
+		}
+		
+		if(this.posiadaWage != other.posiadaWage) {
+			return false;
+		}
+		
+		if(this.posiadaWage) {
+			if(this.waga != other.waga) {
+				return false;
+			}
 		}
 		
 		return true;
