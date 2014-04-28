@@ -18,6 +18,8 @@ import pl.edu.wat.tal.helper.SetHelper;
 
 public class AlgorytmBruteForce {
 	
+	private boolean WYSWIETLAJ_WSZYSTKIE_PODZBIORY = true;
+	private boolean wyswietlonoNajmniejszy = false;
 	private Graf graf;
 	private Set<Set<Wierzcholek>> wszystkiePodzbiory;
 	
@@ -160,13 +162,35 @@ public class AlgorytmBruteForce {
 			
 			// sprawdz czy mamy rozwiazanie
 			if(acykliczne.size() > 0) {
-				System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
-				System.out.println("ROZMIAR ZBIORU [FVS] TO: " + liczbaElementowPodzbioru);
 				
-				System.out.println("\nLISTA ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
+				if(WYSWIETLAJ_WSZYSTKIE_PODZBIORY == true) {
+					System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
+					System.out.println("ROZMIAR ZBIORU [FVS] TO: " + liczbaElementowPodzbioru);
+					
+					System.out.println("\nLISTA ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
+					
+					for(Set<Wierzcholek> s : acykliczne) {
+						System.out.println(s);
+					}
+				} else {
+					if(!wyswietlonoNajmniejszy) {
+						System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
+						System.out.println("ROZMIAR ZBIORU [FVS] TO: " + liczbaElementowPodzbioru);
+						
+						System.out.println("\nLISTA __MINIMALNYCH__ ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
+						
+						for(Set<Wierzcholek> s : acykliczne) {
+							System.out.println(s);
+						}
+						
+						wyswietlonoNajmniejszy = true;
+						
+						System.out.println("\n*****************************************************");
+					}
+				}
+				
 				
 				for(Set<Wierzcholek> s : acykliczne) {
-					System.out.println(s);
 					obliczSumeWag(s);
 				}
 				
@@ -178,9 +202,16 @@ public class AlgorytmBruteForce {
 				//break;
 			} else {
 				System.out.println("\nDLA PODZBIORÓW O LICZBIE ELEMENTÓW [" + liczbaElementowPodzbioru + "] NIE ZNALEZIONO [FVS]");
+				
+				if(WYSWIETLAJ_WSZYSTKIE_PODZBIORY == false) {
+					System.out.println("\n*****************************************************");
+				}
 			}
 			
-			System.out.println("\n*****************************************************");
+			if(WYSWIETLAJ_WSZYSTKIE_PODZBIORY == true) {
+				System.out.println("\n*****************************************************");
+			}
+			
 			
 			// zwieksz liczbe elementow w podzbiorze
 			liczbaElementowPodzbioru++;

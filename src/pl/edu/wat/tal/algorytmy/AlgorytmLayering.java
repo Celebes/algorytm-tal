@@ -17,7 +17,7 @@ public class AlgorytmLayering {
 	private Graf graf;
 	private Set<Wierzcholek> fvs;
 	
-	private double minSumaWag = -1;
+	private double minSumaWag = 0;
 
 	public AlgorytmLayering(Graf graf) {
 		this.graf = graf;

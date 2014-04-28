@@ -12,8 +12,9 @@ import pl.edu.wat.tal.helper.TGFHelper;
 public class Main {
 	
 	public static final int LICZBA_GENEROWANYCH_GRAFOW = 2;
-	public static final int LICZBA_WIERZCHOLKOW_W_GRAFIE = 10;
+	public static final int LICZBA_WIERZCHOLKOW_W_GRAFIE = 8;
 	public static final int LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE = 3;
+	public static final int LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA = 1;
 	public static final boolean CZY_WAGOWY = true;
 	
 	public static void main(String[] args) {
@@ -29,18 +30,26 @@ public class Main {
 					AlgorytmLayering al;
 					
 					for(int i=0; i<LICZBA_GENEROWANYCH_GRAFOW; i++) {
+						
 						Graf g = gg.generujGrafCykliczny(LICZBA_WIERZCHOLKOW_W_GRAFIE, LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE, CZY_WAGOWY);
 						
-						abf = new AlgorytmBruteForce(g);
-						al = new AlgorytmLayering(g);
+						for(int j=0; j<LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA; j++) {
+							System.out.println("\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+							System.out.println((j+1) + " SERIA POMIARÓW DLA " + (i+1) + " GRAFU:");
+							System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+							
+							abf = new AlgorytmBruteForce(g);
+							al = new AlgorytmLayering(g);
+							
+							abf.compute();
+							
+							System.out.println("\n-----------------------------------------------------");
+							
+							al.compute();
+							
+							System.out.println("\n==========================================================================================================");
+						}
 						
-						abf.compute();
-						
-						System.out.println("\n-----------------------------------------------------");
-						
-						al.compute();
-						
-						System.out.println("\n==========================================================================================================");
 					}
 					
 					// jesli wszystko OK to sparsuj plik
