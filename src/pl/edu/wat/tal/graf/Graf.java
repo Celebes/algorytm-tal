@@ -156,7 +156,7 @@ public class Graf {
 
 	@Override
 	public String toString() {
-		return "Graf posiada " + this.wierzcholki.size() + " wierzcholkow (" + this.wierzcholki + ") i " + this.krawedzie.size() + " krawedzi (" + this.krawedzie + ")";
+		return "Graf posiada " + this.wierzcholki.size() + " wierzcholkow: (" + this.wierzcholki + ") i " + this.krawedzie.size() + " krawedzi: (" + this.krawedzie + ")";
 	}
 
 	public Graf klonuj() {
@@ -236,28 +236,48 @@ public class Graf {
 	}
 
 	public void przyporzadkujLosoweWagi() {
-		List<Integer> lista = pickRandom(this.getWierzcholki().size(), this.getKrawedzie().size());
-		
-		System.out.println(lista);
+		List<Integer> lista = pickRandom(this.getWierzcholki().size(), this.getWierzcholki().size());
 		
 		int i=0;
 		
 		for(Integer integer : lista) {
 			Wierzcholek w = wierzcholki.get(i);
-			w.setWaga(lista.get(i));
+			w.setWaga(lista.get(i)+1);
 			i++;
 		}
 		
 		this.wagowy = true;
 	}
 	
+	/*
+	 * losuje n losowych, niepowtarzajacych sie cyf z zakresu <0,k)
+	 */
 	public List<Integer> pickRandom(int n, int k) {
 		List<Integer> wynik = new ArrayList<Integer>();
 	    Random random = new Random();
 	    Set<Integer> picked = new HashSet<>();
 	    while(picked.size() < n) {
 	    	int sizeNaPoczatku = picked.size();
-	    	int znaleziona = random.nextInt(k) + 1;
+	    	int znaleziona = random.nextInt(k);
+	        picked.add(znaleziona);
+	        int sizeNaKoncu = picked.size();
+	        if(sizeNaPoczatku != sizeNaKoncu) {
+	        	wynik.add(znaleziona);
+	        }
+	    }
+	    return wynik;
+	}
+	
+	/*
+	 * losuje n losowych, niepowtarzajacych sie cyf z zakresu <l,k)
+	 */
+	public List<Integer> pickRandomBetween(int n, int l, int k) {
+		List<Integer> wynik = new ArrayList<Integer>();
+	    Random random = new Random();
+	    Set<Integer> picked = new HashSet<>();
+	    while(picked.size() < n) {
+	    	int sizeNaPoczatku = picked.size();
+	    	int znaleziona = random.nextInt(k-l) + l;
 	        picked.add(znaleziona);
 	        int sizeNaKoncu = picked.size();
 	        if(sizeNaPoczatku != sizeNaKoncu) {

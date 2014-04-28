@@ -278,5 +278,18 @@ public class GrafTest {
 		
 		assertTrue(g.getCyclomaticNumber() == 0);
 	}
+	
+	@Test
+	public void testPickRandom() {
+		Graf g = new Graf();
+		
+		g.createWierzcholekFromLine("1 1");
+		g.createWierzcholekFromLine("2 2");
+		
+		g.createKrawedzFromLine("1 2");
+		
+		List<Integer> lista = g.pickRandom(3, 5);
+		System.out.println(lista);
+	}
 
 }
