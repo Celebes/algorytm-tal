@@ -16,14 +16,22 @@ public class AlgorytmLayering {
 	
 	private Graf graf;
 	private Set<Wierzcholek> fvs;
+	
+	private double minSumaWag = -1;
 
 	public AlgorytmLayering(Graf graf) {
 		this.graf = graf;
 	}
 	
 	public void compute() {
+		
 		if(!graf.isWagowy()) {
 			System.out.println("Algorytm warstwowy dzia³a jedynie dla grafów posiadaj¹cych wagi na wierzcho³kach!");
+			return;
+		}
+		
+		if(graf.getCyclomaticNumber() == 0) {
+			System.out.println("GRAF JEST ACYKLICZNY!");
 			return;
 		}
 		
@@ -53,12 +61,22 @@ public class AlgorytmLayering {
 			// usun wierzcholki z wagami rownymi 0
 			usunZeroweWagi(grafH);
 		}
+
+		// oblicz sume wag fvs
+		for(Wierzcholek w : fvs) {
+			for(Wierzcholek w2 : graf.getWierzcholki()) {
+				if(w.getNumer() == w2.getNumer()) {
+					w.setWaga(w2.getWaga());
+					minSumaWag += w2.getWaga();
+					break;
+				}
+			}
+		}
 		
 		System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE WARSTWOWYM");
-		System.out.println("ROZMIAR ZBIORU [FVS] TO: " + fvs.size());
-		
-		//System.out.println("\nWYNIKOWY GRAF ACYKLICZNY TO: " + grafH);
 		System.out.println("MINIMALNY ZBIÓR ROZCYKLAJ¥CY = " + fvs);
+		System.out.println("ROZMIAR ZBIORU [FVS] TO: " + fvs.size());
+		System.out.println("SUMA WAG JEGO WIERZCHOLKOW = " + minSumaWag);
 	}
 
 	private void usunZeroweWagi(Graf grafH) {		

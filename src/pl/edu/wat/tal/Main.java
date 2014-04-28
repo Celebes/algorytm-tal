@@ -6,12 +6,17 @@ import pl.edu.wat.tal.algorytmy.AlgorytmBranching;
 import pl.edu.wat.tal.algorytmy.AlgorytmBruteForce;
 import pl.edu.wat.tal.algorytmy.AlgorytmLayering;
 import pl.edu.wat.tal.graf.Graf;
+import pl.edu.wat.tal.helper.GrafGenerator;
 import pl.edu.wat.tal.helper.TGFHelper;
 
 public class Main {
 	
+	public static final int LICZBA_GENEROWANYCH_GRAFOW = 2;
+	public static final int LICZBA_WIERZCHOLKOW_W_GRAFIE = 10;
+	public static final int LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE = 3;
+	public static final boolean CZY_WAGOWY = true;
+	
 	public static void main(String[] args) {
-		
 		// wczytaj podany w parametrze uruchomieniowym plik
 		if(args.length > 0) {
 			File file = new File(args[0]);
@@ -19,34 +24,43 @@ public class Main {
 			if(file.isFile()) {
 				if(file.getName().endsWith(".tgf")) {
 					
+					GrafGenerator gg = new GrafGenerator();
+					AlgorytmBruteForce abf;
+					AlgorytmLayering al;
+					
+					for(int i=0; i<LICZBA_GENEROWANYCH_GRAFOW; i++) {
+						Graf g = gg.generujGrafCykliczny(LICZBA_WIERZCHOLKOW_W_GRAFIE, LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE, CZY_WAGOWY);
+						
+						abf = new AlgorytmBruteForce(g);
+						al = new AlgorytmLayering(g);
+						
+						abf.compute();
+						
+						System.out.println("\n-----------------------------------------------------");
+						
+						al.compute();
+						
+						System.out.println("\n==========================================================================================================");
+					}
+					
 					// jesli wszystko OK to sparsuj plik
-					TGFHelper tgfHelper = new TGFHelper(file);
+					/*TGFHelper tgfHelper = new TGFHelper(file);
 					Graf graf = tgfHelper.parseTgfFile();
 					graf.przyporzadkujLosoweWagi();
 					
-					System.out.println(graf);
+					System.out.println(graf);*/
 					
 					// rob cos dalej z grafem..
-					/*Graf graf = new Graf();
-					graf.createWierzcholekFromLine("1 a");
-					graf.createWierzcholekFromLine("2 b");
-					graf.createWierzcholekFromLine("3 c");
-					graf.createWierzcholekFromLine("4 d");
 					
-					graf.createKrawedzFromLine("1 2");
-					graf.createKrawedzFromLine("2 3");
-					graf.createKrawedzFromLine("2 4");
-					graf.createKrawedzFromLine("3 4");
 					
-					graf.przyporzadkujLosoweWagi();*/
 					
-					AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
+					/*AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
 					abf.compute();
 					
 					System.out.println("\n*****************************************************");
 					
 					AlgorytmLayering al = new AlgorytmLayering(graf);
-					al.compute();
+					al.compute();*/
 					
 					// to tylko do testow - uzywac zamiast tego metody compute()!
 					//abf.computeZlozonePamieciowo();

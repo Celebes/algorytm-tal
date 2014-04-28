@@ -20,6 +20,10 @@ public class AlgorytmBruteForce {
 	
 	private Graf graf;
 	private Set<Set<Wierzcholek>> wszystkiePodzbiory;
+	
+	private double minSumaWag = -1;
+	private Set<Wierzcholek> optymalnyWagowoFVS = null;
+	private int minFVS = -1;
 
 	public AlgorytmBruteForce(Graf graf) {
 		this.graf = graf;
@@ -97,6 +101,11 @@ public class AlgorytmBruteForce {
 	 */
 	public void compute() {
 		
+		if(graf.getCyclomaticNumber() == 0) {
+			System.out.println("GRAF JEST ACYKLICZNY!");
+			return;
+		}
+		
 		boolean znalezionoFVS = false;
 		
 		// zaczynamy od maski z samych zer, wiec po prostu pusty zbior
@@ -154,14 +163,19 @@ public class AlgorytmBruteForce {
 				System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
 				System.out.println("ROZMIAR ZBIORU [FVS] TO: " + liczbaElementowPodzbioru);
 				
-				System.out.println("\nLISTA MINIMALNYCH ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
+				System.out.println("\nLISTA ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
 				
 				for(Set<Wierzcholek> s : acykliczne) {
 					System.out.println(s);
+					obliczSumeWag(s);
+				}
+				
+				if(minFVS == (-1)) {
+					minFVS = liczbaElementowPodzbioru;
 				}
 				
 				znalezionoFVS = true;
-				break;
+				//break;
 			} else {
 				System.out.println("\nDLA PODZBIORÓW O LICZBIE ELEMENTÓW [" + liczbaElementowPodzbioru + "] NIE ZNALEZIONO [FVS]");
 			}
@@ -178,9 +192,35 @@ public class AlgorytmBruteForce {
 		if(!znalezionoFVS) {
 			System.out.println("Zbiór [FVS] pokrywa siê ze wszystkimi " + liczbaElementowPodzbioru + " wierzcho³kami grafu i jest nastêpuj¹cy: ");
 			System.out.println(this.graf.getWierzcholki());
+			obliczSumeWag(new HashSet<Wierzcholek>(this.graf.getWierzcholki()));
 		}
+		
+		System.out.println();
+		System.out.println("ZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
+		System.out.println("ROZMIAR MINIMALNEGO ZBIORU [FVS] TO: " + minFVS);
+		System.out.println("ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: " + optymalnyWagowoFVS.size());
+		System.out.println("OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:");
+		System.out.println(optymalnyWagowoFVS);
+		System.out.println("SUMA JEGO WAG WYNOSI: " + minSumaWag);
 	}
 	
+	public void obliczSumeWag(Set<Wierzcholek> s) {
+		int suma = 0;
+		for(Wierzcholek w : s) {
+			suma += w.getWaga();
+		}
+		
+		if(minSumaWag == (-1)) {
+			minSumaWag = suma;
+			optymalnyWagowoFVS = s;
+		} else {
+			if(suma < minSumaWag) {
+				minSumaWag = suma;
+				optymalnyWagowoFVS = s;
+			}
+		}
+	}
+
 	public long obliczIloscMozliwychPodzbiorowKElementowych(int liczbaElementowPodzbioru) {
 		int iloscZer = this.graf.getWierzcholki().size() - liczbaElementowPodzbioru;
 		return obliczPermutacjeBezPowtorzen(iloscZer, liczbaElementowPodzbioru);
