@@ -8,12 +8,10 @@ public class Krawedz {
 	
 	private Wierzcholek a;
 	private Wierzcholek b;
-	private int waga;
 	
 	public Krawedz(Wierzcholek a, Wierzcholek b) {
 		this.a = a;
 		this.b = b;
-		this.waga = 0;	// domyslnie waga = 0, pozniej pewnie sie przypisze losowe wagi
 	}
 
 	@Override
@@ -35,16 +33,7 @@ public class Krawedz {
 
 	public void setB(Wierzcholek b) {
 		this.b = b;
-	}
-
-	public int getWaga() {
-		return waga;
-	}
-
-	public void setWaga(int waga) {
-		this.waga = waga;
-	}
-	
+	}	
 	
 	/*
 	 * Jesli wierzcholek a = 1, a wierzcholek b = 2, to wywolanie 'zwrocDrugiWierzcholek(1)' zwroci 2
@@ -67,7 +56,20 @@ public class Krawedz {
 		
 		return false;
 	}
-	
+
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((a == null) ? 0 : a.hashCode());
+		result = prime * result + ((b == null) ? 0 : b.hashCode());
+		return result;
+	}
+
+
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null) {
