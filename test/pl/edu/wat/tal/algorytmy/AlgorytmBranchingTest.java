@@ -99,5 +99,33 @@ public class AlgorytmBranchingTest {
 		assertTrue(wynikowy.getWierzcholki().size() == 6);
 		assertTrue(wynikowy.getKrawedzie().size() == 6);
 	}
+	
+	@Test
+	public void testGeneralisedNeighbors() {
+		Graf g = new Graf();
+		AlgorytmBranching ab = new AlgorytmBranching(g);
+		Set<Wierzcholek> lasF = new HashSet<Wierzcholek>();
+
+		g.createWierzcholekFromLine("1 a");
+		g.createWierzcholekFromLine("2 t");
+		g.createWierzcholekFromLine("3 v");
+		g.createWierzcholekFromLine("4 d");
+		g.createWierzcholekFromLine("5 e");
+		g.createWierzcholekFromLine("6 b");
+		g.createWierzcholekFromLine("7 c");
+		
+		g.createKrawedzFromLine("1 2");			// a do t
+		g.createKrawedzFromLine("3 2");			// t do v
+		g.createKrawedzFromLine("4 2");			// t do d
+		g.createKrawedzFromLine("3 6");			// v do b
+		g.createKrawedzFromLine("3 5");			// v do e
+		g.createKrawedzFromLine("3 4");			// v do d
+		g.createKrawedzFromLine("6 7");			// b do c
+		
+		lasF.add(new Wierzcholek(2, "t"));
+		lasF.add(new Wierzcholek(6, "b"));
+		
+		ab.pobierzGeneralizedNeighbors(g, new Wierzcholek(2, "t"), lasF);
+	}
 
 }

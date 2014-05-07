@@ -1,6 +1,9 @@
 package pl.edu.wat.tal.algorytmy;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Random;
 import java.util.Set;
 
 import pl.edu.wat.tal.graf.Graf;
@@ -23,6 +26,65 @@ public class AlgorytmBranching {
 	public int maximumInducedForest(Graf g, Set<Wierzcholek> f) {
 		
 		return 0;
+	}
+	
+	public Set<Wierzcholek> pobierzGeneralizedNeighbors(Graf g, Wierzcholek t, Set<Wierzcholek> lasF) {
+		Random rand = new Random();
+		Set<Wierzcholek> generalizedNeighbors = new HashSet<Wierzcholek>();
+		
+		// pobierz losowego sasiada t, ktory nie nalezy jeszcze do drzewa
+		Set<Wierzcholek> sasiedziT = g.pobierzWszystkichSasiadowWierzcholka(t);
+		
+		Iterator<Wierzcholek> sasiedziIterator = sasiedziT.iterator();
+		
+		while(sasiedziIterator.hasNext()) {
+			Wierzcholek w = sasiedziIterator.next();
+			
+			if(lasF.contains(w)) {
+				sasiedziIterator.remove();
+			}
+		}
+
+		Wierzcholek wylosowanyWierzcholekV = (new ArrayList<Wierzcholek>(sasiedziT)).get(rand.nextInt(sasiedziT.size()));
+		
+		System.out.println("Wylosowano wierzcholek o nazwie: " + wylosowanyWierzcholekV.getNazwa() + " " + wylosowanyWierzcholekV);
+		
+		// teraz znajdujemy sasiadow V, pomijajac T, ktorzy znajduja sie w lesieF i dodajemy je do zbioru K
+		Set<Wierzcholek> zbiorK = new HashSet<Wierzcholek>();
+		
+		Set<Wierzcholek> sasiedziV = g.pobierzWszystkichSasiadowWierzcholka(wylosowanyWierzcholekV);
+		sasiedziV.remove(t);
+		
+		for(Wierzcholek w : sasiedziV) {
+			if(lasF.contains(w)) {
+				zbiorK.add(w);
+			}
+		}
+		
+		// teraz robimy kompresje zbioru K z wylosowanym wierzcholkiem v
+		zbiorK.add(wylosowanyWierzcholekV);
+		
+		int numerWierzcholkaU = g.getWierzcholki().size() + 1;
+		Graf grafPoKompresji = compress(g, zbiorK);
+		
+		// znajdujemy utworzony podczas kompresjii nowy wierzcholek u
+		Wierzcholek wierzcholekU = null;
+		
+		for(Wierzcholek w : grafPoKompresji.getWierzcholki()) {
+			if(w.getNumer() == numerWierzcholkaU) {
+				wierzcholekU = w;
+			}
+		}
+		
+		Set<Wierzcholek> sasiedziU = grafPoKompresji.pobierzWszystkichSasiadowWierzcholka(wierzcholekU);
+		
+		if(sasiedziU.contains(t)) {
+			sasiedziU.remove(t);
+		}
+		
+		System.out.println("SASIEDZI U TO: " + sasiedziU);
+		
+		return null;
 	}
 	
 	public Graf compress(Graf G, Set<Wierzcholek> T) {
