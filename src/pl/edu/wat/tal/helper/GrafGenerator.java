@@ -27,7 +27,7 @@ public class GrafGenerator {
 	 * Max l. spojnych skladowych: (n - 2)
 	 */
 	
-	public Graf generujGrafCykliczny(int liczbaWierzcholkow, int iloscSpojnychSkladowych, boolean wagowy) {
+	public Graf generujGrafCykliczny(int liczbaWierzcholkow, int iloscSpojnychSkladowych, boolean wagowy, boolean wagiRowneJeden) {
 		
 		if(liczbaWierzcholkow < 3) {
 			System.out.println("Do utworzenia grafu cyklicznego potrzebne sa minimum 3 wierzcholki!");
@@ -124,6 +124,7 @@ public class GrafGenerator {
 		}
 		
 		// utworz krawedzie
+		
 		// minimalna liczba krawedzi to suma ilosci wierzcholkow - 1 w poszczegolnych spojnych skladowych i calosc powiekszona o 1 zeby zapewnic chociaz 1 cykl
 		int minimalnaLiczbaKrawedzi = 1;
 		
@@ -135,11 +136,24 @@ public class GrafGenerator {
 			maksymalnaLiczbaKrawedzi += (tempList.size()*(tempList.size()-1))/2;
 		}
 		
-		int wylosowanaLiczbaKrawedzi = minimalnaLiczbaKrawedzi;
+		// ------- GESTOSC GRAFU -----------
 		
-		if(maksymalnaLiczbaKrawedzi > minimalnaLiczbaKrawedzi) {
-			wylosowanaLiczbaKrawedzi = rand.nextInt(maksymalnaLiczbaKrawedzi - minimalnaLiczbaKrawedzi) + minimalnaLiczbaKrawedzi;
+		// okresl minimalna gestosc
+		double minimalnaGestosc = minimalnaLiczbaKrawedzi*1.0 / maksymalnaLiczbaKrawedzi;
+		
+		// wylosuj na jej podstawie liczbe krawedzi
+		
+		int wylosowanaLiczbaKrawedzi;
+		
+		if(minimalnaGestosc > CommonVariables.GESTOSC_GRAFU) {
+			wylosowanaLiczbaKrawedzi = minimalnaLiczbaKrawedzi;
+		} else {
+			wylosowanaLiczbaKrawedzi = (int) Math.floor(CommonVariables.GESTOSC_GRAFU * maksymalnaLiczbaKrawedzi);
 		}
+
+		/*if(maksymalnaLiczbaKrawedzi > minimalnaLiczbaKrawedzi) {
+			wylosowanaLiczbaKrawedzi = rand.nextInt(maksymalnaLiczbaKrawedzi - minimalnaLiczbaKrawedzi) + minimalnaLiczbaKrawedzi;
+		}*/
 		
 		// utworz podstawowe drogi w grafie, tzn polacz ze soba w droge wszystkie wierzcholki we wszystkich spojnych skladowych
 		for(List<Wierzcholek> tempList : listaListWierzcholkowDlaSpojnychSkladowych) {
@@ -217,7 +231,11 @@ public class GrafGenerator {
 		}
 		
 		if(wagowy) {
-			g.przyporzadkujLosoweWagi();
+			if(wagiRowneJeden) {
+				g.przyporzadkujWagiJeden();
+			} else {
+				g.przyporzadkujLosoweWagi();
+			}
 		}
 		
 		System.out.println("\nWygenerowano graf: " + g);

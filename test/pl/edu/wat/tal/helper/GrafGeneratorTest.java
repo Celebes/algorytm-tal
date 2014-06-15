@@ -34,7 +34,7 @@ public class GrafGeneratorTest {
 	public void test() {
 		GrafGenerator gg = new GrafGenerator();
 		
-		gg.generujGrafCykliczny(12, 4, true);
+		gg.generujGrafCykliczny(12, 4, true, true);
 	}
 
 }

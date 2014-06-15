@@ -18,7 +18,7 @@ import pl.edu.wat.tal.helper.SetHelper;
 
 public class AlgorytmBruteForce {
 	
-	private boolean WYSWIETLAJ_WSZYSTKIE_PODZBIORY = true;
+	private boolean WYSWIETLAJ_WSZYSTKIE_PODZBIORY = false;
 	private boolean wyswietlonoNajmniejszy = false;
 	private Graf graf;
 	private Set<Set<Wierzcholek>> wszystkiePodzbiory;
@@ -123,6 +123,10 @@ public class AlgorytmBruteForce {
 		// maska z iloscia wierzcholkow w grafie
 		int block_mask = element0(this.graf.getWierzcholki().size());
 		
+		// -----------
+		// START POMIARÓW !!!!!
+		// -----------
+		
 		// dla kazdej mozliwej liczby wierzcholkow w podzbiorze k, gdzie k = 0, 1, ... ilosc_wierzcholkow 
 		for(int i=0; i<(this.graf.getWierzcholki().size()); i++) {
 			// dla kazdej liczby elementow w podzbiorze tworzymy nowy zbior acyklicznych zbiorow
@@ -161,34 +165,7 @@ public class AlgorytmBruteForce {
 			}
 			
 			// sprawdz czy mamy rozwiazanie
-			if(acykliczne.size() > 0) {
-				
-				if(WYSWIETLAJ_WSZYSTKIE_PODZBIORY == true) {
-					System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
-					System.out.println("ROZMIAR ZBIORU [FVS] TO: " + liczbaElementowPodzbioru);
-					
-					System.out.println("\nLISTA ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
-					
-					for(Set<Wierzcholek> s : acykliczne) {
-						System.out.println(s);
-					}
-				} else {
-					if(!wyswietlonoNajmniejszy) {
-						System.out.println("\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
-						System.out.println("ROZMIAR ZBIORU [FVS] TO: " + liczbaElementowPodzbioru);
-						
-						System.out.println("\nLISTA __MINIMALNYCH__ ZBIOROW ROZCYKLAJACYCH [FVS]:\n");
-						
-						for(Set<Wierzcholek> s : acykliczne) {
-							System.out.println(s);
-						}
-						
-						wyswietlonoNajmniejszy = true;
-						
-						System.out.println("\n*****************************************************");
-					}
-				}
-				
+			if(acykliczne.size() > 0) {			
 				
 				for(Set<Wierzcholek> s : acykliczne) {
 					obliczSumeWag(s);
@@ -199,19 +176,7 @@ public class AlgorytmBruteForce {
 				}
 				
 				znalezionoFVS = true;
-				//break;
-			} else {
-				System.out.println("\nDLA PODZBIORÓW O LICZBIE ELEMENTÓW [" + liczbaElementowPodzbioru + "] NIE ZNALEZIONO [FVS]");
-				
-				if(WYSWIETLAJ_WSZYSTKIE_PODZBIORY == false) {
-					System.out.println("\n*****************************************************");
-				}
-			}
-			
-			if(WYSWIETLAJ_WSZYSTKIE_PODZBIORY == true) {
-				System.out.println("\n*****************************************************");
-			}
-			
+			}			
 			
 			// zwieksz liczbe elementow w podzbiorze
 			liczbaElementowPodzbioru++;
@@ -220,19 +185,23 @@ public class AlgorytmBruteForce {
 			maska = generujMaskeDlaDanejLiczbyElementowPodzbioru(liczbaElementowPodzbioru);
 		}
 		
+		// -----------
+		// KONIEC POMIARÓW !!!!!
+		// -----------
+		
+		System.out.println();
+		System.out.println("ZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
+		
 		if(!znalezionoFVS) {
 			System.out.println("Zbiór [FVS] pokrywa siê ze wszystkimi " + liczbaElementowPodzbioru + " wierzcho³kami grafu i jest nastêpuj¹cy: ");
 			System.out.println(this.graf.getWierzcholki());
 			obliczSumeWag(new HashSet<Wierzcholek>(this.graf.getWierzcholki()));
-		}
-		
-		System.out.println();
-		System.out.println("ZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
-		System.out.println("ROZMIAR MINIMALNEGO ZBIORU [FVS] TO: " + minFVS);
-		System.out.println("ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: " + optymalnyWagowoFVS.size());
-		System.out.println("OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:");
-		System.out.println(optymalnyWagowoFVS);
-		System.out.println("SUMA JEGO WAG WYNOSI: " + minSumaWag);
+		} else {
+			System.out.println("ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: " + optymalnyWagowoFVS.size());
+			System.out.println("OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:");
+			System.out.println(optymalnyWagowoFVS);
+			System.out.println("SUMA JEGO WAG WYNOSI: " + minSumaWag);
+		}		
 	}
 	
 	public void obliczSumeWag(Set<Wierzcholek> s) {

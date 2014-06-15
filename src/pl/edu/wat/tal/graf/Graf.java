@@ -295,4 +295,12 @@ public class Graf {
 		this.wagowy = wagowy;
 	}
 
+	public void przyporzadkujWagiJeden() {
+		for(Wierzcholek w : wierzcholki) {
+			w.setWaga(1.0);
+		}
+		
+		this.wagowy = true;
+	}
+
 }
