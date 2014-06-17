@@ -302,5 +302,32 @@ public class Graf {
 		
 		this.wagowy = true;
 	}
+	
+	public int obliczStopienWierzcholka(Wierzcholek w) {
+		int wynik = 0;
+		
+		for(Krawedz k : krawedzie) {
+			if(k.getA().equals(w) || k.getB().equals(w)) {
+				wynik++;
+			}
+		}
+		
+		return wynik;
+	}
+
+	public boolean zawieraSemiDisjointCycle() {
+
+		for(Wierzcholek w : wierzcholki) {
+			// jesli jest czescia cyklu
+			if(getCyclomaticNumberDecreaseAfterRemovingVertex(w.getNumer()) > 0) {
+				// i ma stopien > 2
+				if(obliczStopienWierzcholka(w) > 2) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 
 }

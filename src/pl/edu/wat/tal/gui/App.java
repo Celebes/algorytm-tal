@@ -1,49 +1,35 @@
 package pl.edu.wat.tal.gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import java.awt.BorderLayout;
-
-import javax.swing.JTextArea;
-
-import java.awt.GridLayout;
 import java.awt.Color;
-import java.awt.TextArea;
-
-import javax.swing.DropMode;
-
+import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.FlowLayout;
-
-import javax.swing.JLabel;
-
-import com.jgoodies.forms.factories.DefaultComponentFactory;
-
-import de.javasoft.plaf.synthetica.SyntheticaClassyLookAndFeel;
-
-import java.awt.Component;
-import java.net.Inet4Address;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import javax.swing.Box;
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.JScrollBar;
-import javax.swing.JTextField;
-import javax.swing.JFormattedTextField;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import pl.edu.wat.tal.algorytmy.AlgorytmBruteForce;
 import pl.edu.wat.tal.algorytmy.AlgorytmLayering;
@@ -52,21 +38,7 @@ import pl.edu.wat.tal.helper.CommonVariables;
 import pl.edu.wat.tal.helper.GrafGenerator;
 import pl.edu.wat.tal.helper.StatisticsAlgorithmsHelper;
 import pl.edu.wat.tal.messages.Messages;
-
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-
-import org.junit.internal.runners.statements.RunAfters;
-
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
+import de.javasoft.plaf.synthetica.SyntheticaClassyLookAndFeel;
 
 public class App
 {

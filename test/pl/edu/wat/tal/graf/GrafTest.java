@@ -291,5 +291,18 @@ public class GrafTest {
 		List<Integer> lista = g.pickRandom(3, 5);
 		System.out.println(lista);
 	}
+	
+	@Test
+	public void testObliczStopienWierzcholka() {
+		Graf g = new Graf();
+		
+		g.createWierzcholekFromLine("1 1");
+		g.createWierzcholekFromLine("2 2");
+		
+		g.createKrawedzFromLine("1 2");
+		
+		Wierzcholek w = g.findWierzcholekByNumer(1);
+		assertTrue(g.obliczStopienWierzcholka(w) == 1);
+	}
 
 }

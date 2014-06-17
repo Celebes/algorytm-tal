@@ -8,6 +8,7 @@ import java.util.Set;
 import pl.edu.wat.tal.graf.Graf;
 import pl.edu.wat.tal.graf.Wierzcholek;
 import pl.edu.wat.tal.helper.CommonVariables;
+import pl.edu.wat.tal.helper.SetHelper;
 import pl.edu.wat.tal.helper.StatisticsAlgorithmsHelper;
 
 /*
@@ -81,8 +82,49 @@ public class AlgorytmLayering
             // obliczamy nowe wagi bazujac na c
             obliczNoweWagiDlaPodgrafu( grafH, c );
 
+            // pobierz wierzcholki z wagami rownymi 0
+            List<Wierzcholek> F = pobierzZeroweWagi( grafH );
+            
+            // wybierz FVS z F
+            Set<Set<Wierzcholek>> acykliczne = new HashSet<Set<Wierzcholek>>();
+            Set<Set<Wierzcholek>> wszystkiePodzbiory = SetHelper.generujWszystkiePodzbiory(new HashSet<Wierzcholek>(F));
+            
+            for ( Set<Wierzcholek> s : wszystkiePodzbiory )
+            {
+                Graf temp = this.graf.klonuj();
+
+                for ( Wierzcholek w : s )
+                {
+                    temp.removeWierzcholek( w.getNumer() );
+                }
+
+                if ( temp.getCyclomaticNumber() <= 0 )
+                {
+                    acykliczne.add( s );
+                }
+            }
+            
+            int min = Integer.MAX_VALUE;
+
+            for ( Set<Wierzcholek> s : acykliczne )
+            {
+                if ( s.size() < min )
+                {
+                    min = s.size();
+                }
+            }
+            
+            for ( Set<Wierzcholek> s : acykliczne )
+            {
+                if ( s.size() == min )
+                {
+                    fvs.addAll(s);
+                    break;
+                }
+            }
+            
             // usun wierzcholki z wagami rownymi 0
-            usunZeroweWagi( grafH );
+            usunZeroweWagi(grafH);
         }
         // -----------
         // KONIEC POMIARÓW !!!!!
@@ -116,6 +158,27 @@ public class AlgorytmLayering
         return results;
     }
 
+    private List<Wierzcholek> pobierzZeroweWagi( Graf grafH )
+    {
+        List<Wierzcholek> listaWierzcholkowDoUsuniecia = new LinkedList<Wierzcholek>();
+
+        for ( Wierzcholek w : grafH.getWierzcholki() )
+        {
+            if ( Math.abs( w.getWaga() ) < 0.0001 )
+            {
+                listaWierzcholkowDoUsuniecia.add( w );
+                //fvs.add( w );
+            }
+        }
+
+        /*for ( Wierzcholek w : listaWierzcholkowDoUsuniecia )
+        {
+            grafH.removeWierzcholek( w.getNumer() );
+        }*/
+        
+        return listaWierzcholkowDoUsuniecia;
+    }
+    
     private void usunZeroweWagi( Graf grafH )
     {
         List<Wierzcholek> listaWierzcholkowDoUsuniecia = new LinkedList<Wierzcholek>();
@@ -125,7 +188,6 @@ public class AlgorytmLayering
             if ( Math.abs( w.getWaga() ) < 0.0001 )
             {
                 listaWierzcholkowDoUsuniecia.add( w );
-                fvs.add( w );
             }
         }
 
