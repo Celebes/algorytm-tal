@@ -21,6 +21,8 @@ public class CommonVariables
 
     public boolean CZY_WAGOWY = true;
     public boolean WAGI_ROWNE_JEDEN = true;
+    public boolean WAGI_LOSOWE_BEZ_POWTORZEN = false;
+    public boolean WAGI_LOSOWE_Z_POWTORZENIAMI = false;
     public boolean GENERUJ_ALGORYTM_BRUTE_FORCE = true;
     public boolean GENERUJ_ALGORYTM_WARSTWOWY = true;
     public boolean GENERUJ_POMIAR_ZLOZONOSCI_OBLICZENIOWEJ = true;

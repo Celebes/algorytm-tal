@@ -10,6 +10,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -57,6 +58,8 @@ public class App
     private static JRadioButton rbStateWeight;
     private static JSlider sliderDensityGraph;
     private static JCheckBox chkBoxComputeMemory;
+    private static JRadioButton rdbtnWagiLosoweZ;
+    private static JLabel lblNewLabel_4;
 
     /**
      * Launch the application.
@@ -283,9 +286,9 @@ public class App
 
         JPanel panel_8 = new JPanel();
         panel_10.add( panel_8 );
-        panel_8.setLayout( new GridLayout( 1, 2 ) );
+        panel_8.setLayout( new GridLayout( 1, 3 ) );
 
-        rbRandomWeight = new JRadioButton( "wagi losowe" );
+        rbRandomWeight = new JRadioButton( "wagi losowe bez powtórzeñ" );
         rbRandomWeight.addItemListener( new ItemListener()
         {
             public void itemStateChanged( ItemEvent e )
@@ -293,15 +296,11 @@ public class App
                 if ( rbRandomWeight.isSelected() )
                 {
                     // textArea.setText( "Wybrano wagê losow¹" );
-                    CommonVariables.getInstance().CZY_WAGOWY = true;
+                    // CommonVariables.getInstance().CZY_WAGOWY = true;
                     CommonVariables.getInstance().WAGI_ROWNE_JEDEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN = true;
+                    CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI = false;
 
-                }
-                else
-                {
-                    // textArea.setText( "Nie wybrano wagê losow¹" );
-                    CommonVariables.getInstance().CZY_WAGOWY = true;
-                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = true;
                 }
             }
         } );
@@ -309,7 +308,7 @@ public class App
         rbRandomWeight.setSelected( true );
         rbRandomWeight.setHorizontalAlignment( SwingConstants.LEFT );
 
-        rbStateWeight = new JRadioButton( "wagi sta³e równe 1" );
+        rbStateWeight = new JRadioButton( "wagi sta³e" );
         rbStateWeight.addItemListener( new ItemListener()
         {
             public void itemStateChanged( ItemEvent e )
@@ -317,25 +316,44 @@ public class App
                 if ( rbStateWeight.isSelected() )
                 {
                     // textArea.setText( "Wybrano sta³¹ wagê" );
-                }
-                else
-                {
-                    // textArea.setText( "Nie wybrano sta³ej wagi" );
+                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = true;
+                    CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI = false;
+
                 }
             }
         } );
+
+        rdbtnWagiLosoweZ = new JRadioButton( "wagi losowe z powtórzeniami" );
+        rdbtnWagiLosoweZ.addItemListener( new ItemListener()
+        {
+
+            @Override
+            public void itemStateChanged( ItemEvent arg0 )
+            {
+                if ( rdbtnWagiLosoweZ.isSelected() )
+                {
+                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI = true;
+                }
+
+            }
+        } );
+        panel_8.add( rdbtnWagiLosoweZ );
         panel_8.add( rbStateWeight );
         rbStateWeight.setHorizontalAlignment( SwingConstants.LEFT );
 
         ButtonGroup btButtonGroup = new ButtonGroup();
         btButtonGroup.add( rbRandomWeight );
         btButtonGroup.add( rbStateWeight );
+        btButtonGroup.add( rdbtnWagiLosoweZ );
 
         JPanel panel_9 = new JPanel();
         panel_10.add( panel_9 );
         panel_9.setLayout( new GridLayout( 2, 1 ) );
 
-        JLabel lblNewLabel_4 = new JLabel( "Gêstoœæ grafu" );
+        lblNewLabel_4 = new JLabel( "Gêstoœæ grafu [ 0.00 ]" );
         lblNewLabel_4.setHorizontalAlignment( SwingConstants.CENTER );
         panel_9.add( lblNewLabel_4 );
 
@@ -346,6 +364,7 @@ public class App
             {
                 int value = sliderDensityGraph.getValue();
                 double setValue = value / 100.0;
+                lblNewLabel_4.setText( "Gêstoœæ grafu [ " + setValue + " ]" );
                 // textArea.setText( "Slider value = " + setValue );
                 CommonVariables.getInstance().GESTOSC_GRAFU = setValue;
 
@@ -476,6 +495,7 @@ public class App
                 CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII );
         ArrayList<ArrayList<Long>> layerAlgorithmResults = new ArrayList<ArrayList<Long>>(
                 CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII );
+        HashMap<String, ArrayList<Long>> resultsForCompare;
 
         // inicjalizacja elementów listy w zale¿noœci od liczby zadañ
         for ( int i = 0; i < CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; i++ )
@@ -508,34 +528,37 @@ public class App
 
                     abf = new AlgorytmBruteForce( g );
                     al = new AlgorytmLayering( g );
-                    //stAlgorithmsHelperForBF = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_BRUTE_FORCE );
+                    // stAlgorithmsHelperForBF = new StatisticsAlgorithmsHelper(
+                    // CommonVariables.ALGORITHM_BRUTE_FORCE );
                     stAlgorithmsHelperForLayer = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_LAYERING );
 
-                    //stAlgorithmsHelperForBF.startCalculateComplexity();
-                    //long bytesStart = Runtime.getRuntime().freeMemory();
+                    // stAlgorithmsHelperForBF.startCalculateComplexity();
+                    // long bytesStart = Runtime.getRuntime().freeMemory();
                     StringBuilder resAbf = abf.compute();
                     results.append( resAbf.toString() );
-                    //long bytesStop = Runtime.getRuntime().freeMemory();
+                    // long bytesStop = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec: " + (bytesStart -
                     // bytesStop));
-                    //stAlgorithmsHelperForBF.stopCalculateComplexity();
-                    //bfAlgorithmResults.get( j ).add( stAlgorithmsHelperForBF.showResult() );
+                    // stAlgorithmsHelperForBF.stopCalculateComplexity();
+                    // bfAlgorithmResults.get( j ).add(
+                    // stAlgorithmsHelperForBF.showResult() );
                     bfAlgorithmResults.get( j ).add( abf.getCalculateComplexityWrapper() );
 
                     results.append( "\n-----------------------------------------------------\n" );
                     System.out.println( "\n-----------------------------------------------------" );
 
-                    //stAlgorithmsHelperForLayer.startCalculateComplexity();
-                    //long bytesStart2 = Runtime.getRuntime().freeMemory();
+                    // stAlgorithmsHelperForLayer.startCalculateComplexity();
+                    // long bytesStart2 = Runtime.getRuntime().freeMemory();
                     StringBuilder resLayer = al.compute();
                     results.append( resLayer.toString() );
 
-                    //long bytesStop2 = Runtime.getRuntime().freeMemory();
+                    // long bytesStop2 = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec2: " + (bytesStart2 -
                     // bytesStop2));
-                    //stAlgorithmsHelperForLayer.stopCalculateComplexity();
-                   //layerAlgorithmResults.get( j ).add( stAlgorithmsHelperForLayer.showResult() );
-                    layerAlgorithmResults.get( j ).add( al.getCalculateComplexityWrapper());
+                    // stAlgorithmsHelperForLayer.stopCalculateComplexity();
+                    // layerAlgorithmResults.get( j ).add(
+                    // stAlgorithmsHelperForLayer.showResult() );
+                    layerAlgorithmResults.get( j ).add( al.getCalculateComplexityWrapper() );
 
                     results.append( "\n==========================================================================================================\n" );
                     System.out.println( "\n==========================================================================================================" );
@@ -563,6 +586,13 @@ public class App
                     System.out.println( "URUCHOMIENIE " + z + ": " + result );
                     z++;
                 }
+
+                // porównanie wydajnoœci obu algorytmów
+                resultsForCompare = new HashMap<>();
+                resultsForCompare.put( CommonVariables.ALGORITHM_BRUTE_FORCE, bfAlgorithmResults.get( j ) );
+                resultsForCompare.put( CommonVariables.ALGORITHM_LAYERING, layerAlgorithmResults.get( j ) );
+                results.append( StatisticsAlgorithmsHelper.compareAlgorithms( resultsForCompare ) );
+
             }
         }
 
@@ -604,6 +634,7 @@ public class App
         rbStateWeight.setEnabled( false );
         sliderDensityGraph.setEnabled( false );
         chkBoxComputeMemory.setEnabled( false );
+        rdbtnWagiLosoweZ.setEnabled( false );
 
     }
 
@@ -620,6 +651,7 @@ public class App
         rbRandomWeight.setEnabled( true );
         rbStateWeight.setEnabled( true );
         sliderDensityGraph.setEnabled( true );
+        rdbtnWagiLosoweZ.setEnabled( true );
         // chkBoxComputeMemory.setEnabled( true );
     }
 }
