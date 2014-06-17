@@ -11,6 +11,7 @@ import javax.swing.JTextArea;
 
 import java.awt.GridLayout;
 import java.awt.Color;
+import java.awt.TextArea;
 
 import javax.swing.DropMode;
 
@@ -48,13 +49,29 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+
 public class App
 {
 
     private JFrame frame;
-    private JTextField textField;
+    private JTextField tfNumberOfMeasurements;
     private Messages singletonMessages;
-    private JTextField textField_1;
+    private JTextField tfNumberOfGraphs;
+    private JTextArea textArea;
+    private JCheckBox chkBoxBruteForceAlgorithm;
+    private JCheckBox chkBoxLayerAlgorithm;
+    private JCheckBox chkBoxComputeComplexity;
+    private JSpinner spinnerVertexFrom;
+    private JSpinner spinnerVertextTo;
+    private JRadioButton rbRandomWeight;
+    private JRadioButton rbStateWeight;
+    private JSlider sliderDensityGraph;
 
     /**
      * Launch the application.
@@ -103,7 +120,7 @@ public class App
      */
     private void initialize()
     {
-        frame = new JFrame("FVS ALGORITHM GURNIAK JEDYNAK");
+        frame = new JFrame( "FVS ALGORITHM GURNIAK JEDYNAK" );
         frame.setBounds( 100, 100, 815, 498 );
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         frame.getContentPane().setLayout( new GridLayout( 1, 0, 0, 0 ) );
@@ -112,13 +129,13 @@ public class App
         frame.getContentPane().add( panel );
         panel.setLayout( new GridLayout( 1, 0, 0, 0 ) );
 
-        JTextArea textArea = new JTextArea();
-        //panel.add( textArea );
-        
-        //textArea.setEditable( false );
+        textArea = new JTextArea();
+        // panel.add( textArea );
+
+        // textArea.setEditable( false );
         JScrollPane scroll = new JScrollPane( textArea );
         scroll.setVerticalScrollBarPolicy( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
-        panel.add(scroll);
+        panel.add( scroll );
 
         JPanel panel_1 = new JPanel();
         panel.add( panel_1 );
@@ -132,18 +149,70 @@ public class App
         panel_3a.setLayout( new GridLayout( 3, 1 ) );
         panel_3.add( panel_3a );
 
-        JLabel lblNewLabel = new JLabel( "Wybór algorytmu" );
-        lblNewLabel.setFont( new Font( "Tahoma", Font.BOLD, 11 ) );
-        lblNewLabel.setHorizontalAlignment( SwingConstants.CENTER );
-        panel_3a.add( lblNewLabel );
+        JLabel lbChooseAlgorithm = new JLabel( "Wybór algorytmu" );
+        lbChooseAlgorithm.setFont( new Font( "Tahoma", Font.BOLD, 11 ) );
+        lbChooseAlgorithm.setHorizontalAlignment( SwingConstants.CENTER );
+        panel_3a.add( lbChooseAlgorithm );
 
-        JCheckBox chckbxNewCheckBox = new JCheckBox( "Algorytm Brute-force" );
-        chckbxNewCheckBox.setSelected( true );
-        panel_3a.add( chckbxNewCheckBox );
+        chkBoxBruteForceAlgorithm = new JCheckBox( "Algorytm Brute-force" );
+        chkBoxBruteForceAlgorithm.addItemListener( new ItemListener()
+        {
+            public void itemStateChanged( ItemEvent arg0 )
+            {
+                if ( chkBoxBruteForceAlgorithm.isSelected() )
+                {
+                    textArea.setText( "Wybrano algorytm Brute Force" );
+                }
+                else
+                {
+                    textArea.setText( "Nie wybrano algorytm Brute Force" );
+                }
+            }
+        } );
 
-        JCheckBox chckbxNewCheckBox_1 = new JCheckBox( "Algorytm warstwowy" );
-        chckbxNewCheckBox_1.setSelected( true );
-        panel_3a.add( chckbxNewCheckBox_1 );
+        /*        chkBoxBruteForceAlgorithm.addChangeListener(new ChangeListener() {
+                    public void stateChanged(ChangeEvent arg0) {
+                        if(chkBoxBruteForceAlgorithm.isSelected())
+                        {
+                            textArea.setText( "Wybrano algorytm Brute Force" );
+                        }else
+                        {
+                            textArea.setText( "Nie wybrano algorytm Brute Force" );
+                        }
+                    }
+                });*/
+        chkBoxBruteForceAlgorithm.setSelected( true );
+        panel_3a.add( chkBoxBruteForceAlgorithm );
+
+        chkBoxLayerAlgorithm = new JCheckBox( "Algorytm warstwowy" );
+        chkBoxLayerAlgorithm.addItemListener( new ItemListener()
+        {
+            public void itemStateChanged( ItemEvent e )
+            {
+                if ( chkBoxLayerAlgorithm.isSelected() )
+                {
+                    textArea.setText( "Wybrano algorytm Warstwowy" );
+                }
+                else
+                {
+                    textArea.setText( "Nie wybrano algorytm Warstwowy" );
+                }
+            }
+        } );
+        /*        chkBoxLayerAlgorithm.addChangeListener(new ChangeListener() {
+                    public void stateChanged(ChangeEvent e) {
+                        if(chkBoxLayerAlgorithm.isSelected())
+                        {
+                            textArea.setText( "Wybrano algorytm Warstwowy" );
+                        }else
+                        {
+                            textArea.setText( "Nie wybrano algorytm Warstwowy" );
+                        }
+                    }
+                });*/
+
+        chkBoxLayerAlgorithm.setSelected( true );
+        panel_3a.add( chkBoxLayerAlgorithm );
 
         JPanel panel_3b = new JPanel();
         panel_3.add( panel_3b );
@@ -154,9 +223,24 @@ public class App
         lblNewLabel_1.setHorizontalAlignment( SwingConstants.CENTER );
         panel_3b.add( lblNewLabel_1 );
 
-        JCheckBox chckbxNewCheckBox_2 = new JCheckBox( "Czas wykonania" );
-        chckbxNewCheckBox_2.setSelected( true );
-        panel_3b.add( chckbxNewCheckBox_2 );
+        chkBoxComputeComplexity = new JCheckBox( "Czas wykonania" );
+        chkBoxComputeComplexity.addItemListener( new ItemListener()
+        {
+            public void itemStateChanged( ItemEvent e )
+            {
+                if ( chkBoxComputeComplexity.isSelected() )
+                {
+                    textArea.setText( "Wybrano pomiar z³o¿onoœci obliczeniowej" );
+                }
+                else
+                {
+                    textArea.setText( "Nie wybrano pomiar z³o¿onoœci obliczeniowej" );
+                }
+            }
+        } );
+
+        chkBoxComputeComplexity.setSelected( true );
+        panel_3b.add( chkBoxComputeComplexity );
 
         JCheckBox chckbxNewCheckBox_3 = new JCheckBox( "Z³o¿onoœæ pamiêciowa" );
         chckbxNewCheckBox_3.setEnabled( false );
@@ -184,28 +268,56 @@ public class App
         label_1.setBounds( 206, 8, 183, 14 );
         panel_7.add( label_1 );
 
-        textField_1 = new JTextField();
-        textField_1.setColumns( 10 );
-        textField_1.setBounds( 10, 8, 48, 20 );
-        panel_7.add( textField_1 );
+        tfNumberOfGraphs = new JTextField();
+        tfNumberOfGraphs.setColumns( 10 );
+        tfNumberOfGraphs.setBounds( 10, 8, 48, 20 );
+        panel_7.add( tfNumberOfGraphs );
 
         JPanel panel_8 = new JPanel();
         panel_10.add( panel_8 );
         panel_8.setLayout( new GridLayout( 1, 2 ) );
 
-        JRadioButton rdbtnNewRadioButton = new JRadioButton( "wagi losowe" );
-        panel_8.add( rdbtnNewRadioButton );
-        rdbtnNewRadioButton.setSelected( true );
-        rdbtnNewRadioButton.setHorizontalAlignment( SwingConstants.LEFT );
+        rbRandomWeight = new JRadioButton( "wagi losowe" );
+        rbRandomWeight.addItemListener( new ItemListener()
+        {
+            public void itemStateChanged( ItemEvent e )
+            {
+                if ( rbRandomWeight.isSelected() )
+                {
+                    textArea.setText( "Wybrano wagê losow¹" );
+                }
+                else
+                {
+                    textArea.setText( "Nie wybrano wagê losow¹" );
+                }
+            }
+        } );
+        panel_8.add( rbRandomWeight );
+        rbRandomWeight.setSelected( true );
+        rbRandomWeight.setHorizontalAlignment( SwingConstants.LEFT );
 
-        JRadioButton rdbtnNewRadioButton_1 = new JRadioButton( "wagi sta³e równe 1" );
-        panel_8.add( rdbtnNewRadioButton_1 );
-        rdbtnNewRadioButton_1.setHorizontalAlignment( SwingConstants.LEFT );
+        rbStateWeight = new JRadioButton( "wagi sta³e równe 1" );
+        rbStateWeight.addItemListener( new ItemListener()
+        {
+            public void itemStateChanged( ItemEvent e )
+            {
+                if ( rbStateWeight.isSelected() )
+                {
+                    textArea.setText( "Wybrano sta³¹ wagê" );
+                }
+                else
+                {
+                    textArea.setText( "Nie wybrano sta³ej wagi" );
+                }
+            }
+        } );
+        panel_8.add( rbStateWeight );
+        rbStateWeight.setHorizontalAlignment( SwingConstants.LEFT );
 
         ButtonGroup btButtonGroup = new ButtonGroup();
-        btButtonGroup.add( rdbtnNewRadioButton );
-        btButtonGroup.add( rdbtnNewRadioButton_1 );
-        
+        btButtonGroup.add( rbRandomWeight );
+        btButtonGroup.add( rbStateWeight );
+
         JPanel panel_9 = new JPanel();
         panel_10.add( panel_9 );
         panel_9.setLayout( new GridLayout( 2, 1 ) );
@@ -214,14 +326,24 @@ public class App
         lblNewLabel_4.setHorizontalAlignment( SwingConstants.CENTER );
         panel_9.add( lblNewLabel_4 );
 
-        JSlider slider = new JSlider();
-        slider.setToolTipText("Ustaw g\u0119sto\u015B\u0107 grafu z zakresu 0,01 - 1,00");
-        slider.setSnapToTicks(true);
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-        slider.setMinorTickSpacing(1);
-        slider.setValue( 0 );
-        panel_9.add( slider );
+        sliderDensityGraph = new JSlider();
+        sliderDensityGraph.addChangeListener( new ChangeListener()
+        {
+            public void stateChanged( ChangeEvent e )
+            {
+                int value = sliderDensityGraph.getValue();
+                double setValue = value/100.0;
+                textArea.setText( "Slider value = " + setValue );
+
+            }
+        } );
+        sliderDensityGraph.setToolTipText( "Ustaw g\u0119sto\u015B\u0107 grafu z zakresu 0,01 - 1,00" );
+        sliderDensityGraph.setSnapToTicks( true );
+        sliderDensityGraph.setPaintTicks( true );
+        sliderDensityGraph.setPaintLabels( true );
+        sliderDensityGraph.setMinorTickSpacing( 1 );
+        sliderDensityGraph.setValue( 0 );
+        panel_9.add( sliderDensityGraph );
 
         JPanel panel_2 = new JPanel();
         panel_1.add( panel_2 );
@@ -236,15 +358,15 @@ public class App
         label.setBounds( 202, 14, 187, 14 );
         panel_4.add( label );
 
-        JSpinner spinner = new JSpinner();
-        spinner.setModel( new SpinnerNumberModel( 3, 3, 16, 1 ) );
-        spinner.setBounds( 36, 11, 39, 20 );
-        panel_4.add( spinner );
+        spinnerVertexFrom = new JSpinner();
+        spinnerVertexFrom.setModel( new SpinnerNumberModel( 3, 3, 16, 1 ) );
+        spinnerVertexFrom.setBounds( 36, 11, 39, 20 );
+        panel_4.add( spinnerVertexFrom );
 
-        JSpinner spinner_1 = new JSpinner();
-        spinner_1.setModel( new SpinnerNumberModel( 16, 3, 16, 1 ) );
-        spinner_1.setBounds( 119, 11, 39, 20 );
-        panel_4.add( spinner_1 );
+        spinnerVertextTo = new JSpinner();
+        spinnerVertextTo.setModel( new SpinnerNumberModel( 16, 3, 16, 1 ) );
+        spinnerVertextTo.setBounds( 119, 11, 39, 20 );
+        panel_4.add( spinnerVertextTo );
 
         JLabel lblOd = new JLabel( "od" );
         lblOd.setBounds( 10, 14, 16, 14 );
@@ -259,10 +381,10 @@ public class App
         panel_2.add( panel_6 );
         panel_6.setLayout( null );
 
-        textField = new JTextField();
-        textField.setBounds( 10, 11, 48, 20 );
-        panel_6.add( textField );
-        textField.setColumns( 10 );
+        tfNumberOfMeasurements = new JTextField();
+        tfNumberOfMeasurements.setBounds( 10, 11, 48, 20 );
+        panel_6.add( tfNumberOfMeasurements );
+        tfNumberOfMeasurements.setColumns( 10 );
 
         JLabel lblNewLabel_3 = new JLabel( "Iloœæ pomiarów dla zadania" );
         lblNewLabel_3.setBounds( 204, 14, 185, 14 );
@@ -279,10 +401,19 @@ public class App
         panel_2.add( panel_12 );
 
         JButton btnStart = new JButton( "Start" );
+
+        btnStart.addActionListener( new ActionListener()
+        {
+            public void actionPerformed( ActionEvent arg0 )
+            {
+                textArea.setText( "Wciœniêto Start i rozpoczêto symulacjê\n" );
+                textArea.append( "Liczba generowanych grafów = " + tfNumberOfGraphs.getText() + "\n" );
+                textArea.append( "Iloœæ pomiarów dla zadania = " + tfNumberOfMeasurements.getText() + "\n" );
+                textArea.append( "Od = " + spinnerVertexFrom.getValue() + "\n" );
+                textArea.append( "Do = " + spinnerVertextTo.getValue() + "\n" );
+            }
+        } );
         btnStart.setForeground( new Color( 0, 0, 0 ) );
         panel_12.add( btnStart );
-
-
-
     }
 }
