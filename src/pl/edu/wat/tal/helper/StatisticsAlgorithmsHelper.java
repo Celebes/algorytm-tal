@@ -58,17 +58,19 @@ public class StatisticsAlgorithmsHelper
         Long layerAvarage = getAvarage( layer );
         double ratio;
         
-        results.append( "Przeciêtna z³o¿onoœæ obliczeniowa Alg. Brute- force: " + bruteForceAvarage + "\n");
-        results.append( "Przeciêtna z³o¿onoœæ obliczeniowa Alg. warstwowego: " + layerAvarage + "\n" );
+        results.append( "			Œredni czas Brute-Force: " + bruteForceAvarage + "\n");
+        results.append( "			Œredni czas Layering: " + layerAvarage + "\n" );
 
         if(bruteForceAvarage > layerAvarage)
         {
             ratio = (double) bruteForceAvarage/layerAvarage;
-            results.append( "Alg. warstwowy by³ " + ratio + " razy szybszy od alg. Brute-force\n" );
+            ratio = (double) Math.round(ratio * 1000) / 1000;
+            results.append( "			Layering by³ " + ratio + " razy szybszy od Brute-Force\n" );
         }else
         {
             ratio = (double) layerAvarage/bruteForceAvarage;
-            results.append( "Alg. Brute-force by³ " + ratio + " razy szybszy od alg. warstwowego\n" );
+            ratio = (double) Math.round(ratio * 1000) / 1000;
+            results.append( "			Brute-Force by³ " + ratio + " razy szybszy od Layering\n" );
         }
 
         return results.toString();

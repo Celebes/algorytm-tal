@@ -544,33 +544,54 @@ public class App
                 	textArea.append( "		Przeprowadzono pomiar numer [" + ( k + 1 ) + "]:\n\n" );
                     System.out.println( "        Przeprowadzono pomiar numer [" + ( k + 1 ) + "]" );
 
-                    abf = new AlgorytmBruteForce( g );
-                    al = new AlgorytmLayering( g );
+                    
+                    
                     // stAlgorithmsHelperForBF = new StatisticsAlgorithmsHelper(
                     // CommonVariables.ALGORITHM_BRUTE_FORCE );
                     stAlgorithmsHelperForLayer = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_LAYERING );
 
                     // stAlgorithmsHelperForBF.startCalculateComplexity();
                     // long bytesStart = Runtime.getRuntime().freeMemory();
-                    StringBuilder resAbf = abf.compute();
+                    if(CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE) {
+                    	abf = new AlgorytmBruteForce( g );
+                    	StringBuilder resAbf = abf.compute();
+                    	textArea.append( resAbf.toString() );
+                    	long czas = abf.getCalculateComplexityWrapper();
+                    	textArea.append("			Czas: " + czas + " [ns]\n");
+                    	bfAlgorithmResults.get( j ).add( czas );
+                    }
+                    
+                    if(CommonVariables.getInstance().GENERUJ_ALGORYTM_WARSTWOWY) {
+                    	if(CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE) {
+                    		textArea.append("\n");
+                    	}
+                    	
+                    	al = new AlgorytmLayering( g );
+                    	StringBuilder resLayer = al.compute();
+                    	textArea.append( resLayer.toString() );
+                    	long czas = al.getCalculateComplexityWrapper();
+                    	textArea.append("			Czas: " + czas + " [ns]\n");
+                    	layerAlgorithmResults.get( j ).add( czas );
+                    }
+                    
                     //results.append( resAbf.toString() );
-                    textArea.append( resAbf.toString() );
+                    
                     // long bytesStop = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec: " + (bytesStart -
                     // bytesStop));
                     // stAlgorithmsHelperForBF.stopCalculateComplexity();
                     // bfAlgorithmResults.get( j ).add(
                     // stAlgorithmsHelperForBF.showResult() );
-                    bfAlgorithmResults.get( j ).add( abf.getCalculateComplexityWrapper() );
+                    
 
                     //results.append( "\n-----------------------------------------------------\n" );
                     System.out.println( "\n-----------------------------------------------------" );
 
                     // stAlgorithmsHelperForLayer.startCalculateComplexity();
                     // long bytesStart2 = Runtime.getRuntime().freeMemory();
-                    StringBuilder resLayer = al.compute();
+                    
                     //results.append( resLayer.toString() );
-                    textArea.append( resLayer.toString() );
+                    
 
                     // long bytesStop2 = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec2: " + (bytesStart2 -
@@ -578,7 +599,7 @@ public class App
                     // stAlgorithmsHelperForLayer.stopCalculateComplexity();
                     // layerAlgorithmResults.get( j ).add(
                     // stAlgorithmsHelperForLayer.showResult() );
-                    layerAlgorithmResults.get( j ).add( al.getCalculateComplexityWrapper() );
+                    
 
                     //results.append( "\n==========================================================================================================\n" );
                     System.out.println( "\n==========================================================================================================" );
@@ -613,6 +634,8 @@ public class App
                 resultsForCompare.put( CommonVariables.ALGORITHM_BRUTE_FORCE, bfAlgorithmResults.get( j ) );
                 resultsForCompare.put( CommonVariables.ALGORITHM_LAYERING, layerAlgorithmResults.get( j ) );
                 //results.append( StatisticsAlgorithmsHelper.compareAlgorithms( resultsForCompare ) );
+                textArea.append("			>>>PODSUMOWANIE:\n\n");
+                textArea.append( StatisticsAlgorithmsHelper.compareAlgorithms( resultsForCompare ) );
                 textArea.append("\n");
             }
             
