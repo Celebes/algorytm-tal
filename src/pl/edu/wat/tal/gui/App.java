@@ -332,7 +332,7 @@ public class App
             public void stateChanged( ChangeEvent e )
             {
                 int value = sliderDensityGraph.getValue();
-                double setValue = value/100.0;
+                double setValue = value / 100.0;
                 textArea.setText( "Slider value = " + setValue );
 
             }

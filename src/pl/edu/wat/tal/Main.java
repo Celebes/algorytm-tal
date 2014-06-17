@@ -27,28 +27,28 @@ public class Main {
 					AlgorytmLayering al;
 					StatisticsAlgorithmsHelper stAlgorithmsHelperForBF;
 					StatisticsAlgorithmsHelper stAlgorithmsHelperForLayer;
-					ArrayList<ArrayList<Long>> bfAlgorithmResults = new ArrayList<ArrayList<Long>>(CommonVariables.LICZBA_GENEROWANYCH_GRAFOW_W_SERII);
-					ArrayList<ArrayList<Long>> layerAlgorithmResults = new ArrayList<ArrayList<Long>>(CommonVariables.LICZBA_GENEROWANYCH_GRAFOW_W_SERII);
+					ArrayList<ArrayList<Long>> bfAlgorithmResults = new ArrayList<ArrayList<Long>>(CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII);
+					ArrayList<ArrayList<Long>> layerAlgorithmResults = new ArrayList<ArrayList<Long>>(CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII);
 					
 
 					//inicjalizacja elementów listy w zale¿noœci od liczby zadañ
-					for(int i=0; i<CommonVariables.LICZBA_GENEROWANYCH_GRAFOW_W_SERII; i++)
+					for(int i=0; i<CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; i++)
 					{
 						bfAlgorithmResults.add(new ArrayList<Long>());
 						layerAlgorithmResults.add(new ArrayList<Long>());
 					}
 					
-					int iloscSerii = CommonVariables.SERIA_POMIAROW_DO - CommonVariables.SERIA_POMIAROW_OD + 1;
+					int iloscSerii = CommonVariables.getInstance().SERIA_POMIAROW_DO - CommonVariables.getInstance().SERIA_POMIAROW_OD + 1;
 					
 					for(int i=0; i<iloscSerii; i++) {
-						int aktualnaSeria = CommonVariables.SERIA_POMIAROW_OD + i;
+						int aktualnaSeria = CommonVariables.getInstance().SERIA_POMIAROW_OD + i;
 						System.out.println("Seria pomiarów numer [" + (i+1) + "], rozmiar problemu [" + aktualnaSeria + "]");
 						
-						for(int j=0; j<CommonVariables.LICZBA_GENEROWANYCH_GRAFOW_W_SERII; j++) {
-							Graf g = gg.generujGrafCykliczny(aktualnaSeria, CommonVariables.LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE, CommonVariables.CZY_WAGOWY, CommonVariables.WAGI_ROWNE_JEDEN);
+						for(int j=0; j<CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; j++) {
+							Graf g = gg.generujGrafCykliczny(aktualnaSeria, CommonVariables.getInstance().LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE, CommonVariables.getInstance().CZY_WAGOWY, CommonVariables.getInstance().WAGI_ROWNE_JEDEN);
 							System.out.println("	Wygenerowano graf numer [" + (j+1) + "]");
 							
-							for(int k=0; k<CommonVariables.LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA; k++) {
+							for(int k=0; k<CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA; k++) {
 								System.out.println("		Przeprowadzono pomiar numer [" + (k+1) + "]");
 								
 								abf = new AlgorytmBruteForce(g);
