@@ -86,6 +86,8 @@ public class App
     private static JRadioButton rbStateWeight;
     private static JSlider sliderDensityGraph;
     private static JCheckBox chkBoxComputeMemory;
+    private static JRadioButton rdbtnWagiLosoweZ;
+    private static JLabel lblNewLabel_4;
 
     /**
      * Launch the application.
@@ -312,9 +314,9 @@ public class App
 
         JPanel panel_8 = new JPanel();
         panel_10.add( panel_8 );
-        panel_8.setLayout( new GridLayout( 1, 2 ) );
+        panel_8.setLayout( new GridLayout( 1, 3 ) );
 
-        rbRandomWeight = new JRadioButton( "wagi losowe" );
+        rbRandomWeight = new JRadioButton( "wagi losowe bez powtórzeñ" );
         rbRandomWeight.addItemListener( new ItemListener()
         {
             public void itemStateChanged( ItemEvent e )
@@ -322,15 +324,11 @@ public class App
                 if ( rbRandomWeight.isSelected() )
                 {
                     // textArea.setText( "Wybrano wagê losow¹" );
-                    CommonVariables.getInstance().CZY_WAGOWY = true;
+                    // CommonVariables.getInstance().CZY_WAGOWY = true;
                     CommonVariables.getInstance().WAGI_ROWNE_JEDEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN = true;
+                    CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI = false;
 
-                }
-                else
-                {
-                    // textArea.setText( "Nie wybrano wagê losow¹" );
-                    CommonVariables.getInstance().CZY_WAGOWY = true;
-                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = true;
                 }
             }
         } );
@@ -338,7 +336,7 @@ public class App
         rbRandomWeight.setSelected( true );
         rbRandomWeight.setHorizontalAlignment( SwingConstants.LEFT );
 
-        rbStateWeight = new JRadioButton( "wagi sta³e równe 1" );
+        rbStateWeight = new JRadioButton( "wagi sta³e" );
         rbStateWeight.addItemListener( new ItemListener()
         {
             public void itemStateChanged( ItemEvent e )
@@ -346,25 +344,44 @@ public class App
                 if ( rbStateWeight.isSelected() )
                 {
                     // textArea.setText( "Wybrano sta³¹ wagê" );
-                }
-                else
-                {
-                    // textArea.setText( "Nie wybrano sta³ej wagi" );
+                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = true;
+                    CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI = false;
+
                 }
             }
         } );
+
+        rdbtnWagiLosoweZ = new JRadioButton( "wagi losowe z powtórzeniami" );
+        rdbtnWagiLosoweZ.addItemListener( new ItemListener()
+        {
+
+            @Override
+            public void itemStateChanged( ItemEvent arg0 )
+            {
+                if ( rdbtnWagiLosoweZ.isSelected() )
+                {
+                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN = false;
+                    CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI = true;
+                }
+
+            }
+        } );
+        panel_8.add( rdbtnWagiLosoweZ );
         panel_8.add( rbStateWeight );
         rbStateWeight.setHorizontalAlignment( SwingConstants.LEFT );
 
         ButtonGroup btButtonGroup = new ButtonGroup();
         btButtonGroup.add( rbRandomWeight );
         btButtonGroup.add( rbStateWeight );
+        btButtonGroup.add( rdbtnWagiLosoweZ );
 
         JPanel panel_9 = new JPanel();
         panel_10.add( panel_9 );
         panel_9.setLayout( new GridLayout( 2, 1 ) );
 
-        JLabel lblNewLabel_4 = new JLabel( "Gêstoœæ grafu" );
+        lblNewLabel_4 = new JLabel( "Gêstoœæ grafu [ 0.00 ]" );
         lblNewLabel_4.setHorizontalAlignment( SwingConstants.CENTER );
         panel_9.add( lblNewLabel_4 );
 
@@ -375,6 +392,7 @@ public class App
             {
                 int value = sliderDensityGraph.getValue();
                 double setValue = value / 100.0;
+                lblNewLabel_4.setText( "Gêstoœæ grafu [ " + setValue + " ]" );
                 // textArea.setText( "Slider value = " + setValue );
                 CommonVariables.getInstance().GESTOSC_GRAFU = setValue;
 
@@ -644,6 +662,7 @@ public class App
         rbStateWeight.setEnabled( false );
         sliderDensityGraph.setEnabled( false );
         chkBoxComputeMemory.setEnabled( false );
+        rdbtnWagiLosoweZ.setEnabled( false );
 
     }
 
@@ -660,6 +679,7 @@ public class App
         rbRandomWeight.setEnabled( true );
         rbStateWeight.setEnabled( true );
         sliderDensityGraph.setEnabled( true );
+        rdbtnWagiLosoweZ.setEnabled( true );
         // chkBoxComputeMemory.setEnabled( true );
     }
 }
