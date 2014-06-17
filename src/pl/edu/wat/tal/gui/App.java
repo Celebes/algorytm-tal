@@ -25,6 +25,7 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 import de.javasoft.plaf.synthetica.SyntheticaClassyLookAndFeel;
 
 import java.awt.Component;
+import java.net.Inet4Address;
 import java.text.ParseException;
 
 import javax.swing.Box;
@@ -43,6 +44,7 @@ import javax.swing.JSlider;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import pl.edu.wat.tal.helper.CommonVariables;
 import pl.edu.wat.tal.messages.Messages;
 
 import javax.swing.JScrollPane;
@@ -51,8 +53,12 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+
+import org.junit.internal.runners.statements.RunAfters;
+
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
@@ -72,6 +78,7 @@ public class App
     private JRadioButton rbRandomWeight;
     private JRadioButton rbStateWeight;
     private JSlider sliderDensityGraph;
+    private JCheckBox chkBoxComputeMemory;
 
     /**
      * Launch the application.
@@ -87,6 +94,7 @@ public class App
                 {
                     App window = new App();
                     window.frame.setVisible( true );
+                    runAlgorithms();
                 }
                 catch ( Exception e )
                 {
@@ -162,10 +170,12 @@ public class App
                 if ( chkBoxBruteForceAlgorithm.isSelected() )
                 {
                     textArea.setText( "Wybrano algorytm Brute Force" );
+                    CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE = true;
                 }
                 else
                 {
                     textArea.setText( "Nie wybrano algorytm Brute Force" );
+                    CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE = false;
                 }
             }
         } );
@@ -192,10 +202,12 @@ public class App
                 if ( chkBoxLayerAlgorithm.isSelected() )
                 {
                     textArea.setText( "Wybrano algorytm Warstwowy" );
+                    CommonVariables.getInstance().GENERUJ_ALGORYTM_WARSTWOWY = true;
                 }
                 else
                 {
                     textArea.setText( "Nie wybrano algorytm Warstwowy" );
+                    CommonVariables.getInstance().GENERUJ_ALGORYTM_WARSTWOWY = false;
                 }
             }
         } );
@@ -231,10 +243,12 @@ public class App
                 if ( chkBoxComputeComplexity.isSelected() )
                 {
                     textArea.setText( "Wybrano pomiar z³o¿onoœci obliczeniowej" );
+                    CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_OBLICZENIOWEJ = true;
                 }
                 else
                 {
                     textArea.setText( "Nie wybrano pomiar z³o¿onoœci obliczeniowej" );
+                    CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_OBLICZENIOWEJ = false;
                 }
             }
         } );
@@ -242,9 +256,20 @@ public class App
         chkBoxComputeComplexity.setSelected( true );
         panel_3b.add( chkBoxComputeComplexity );
 
-        JCheckBox chckbxNewCheckBox_3 = new JCheckBox( "Z³o¿onoœæ pamiêciowa" );
-        chckbxNewCheckBox_3.setEnabled( false );
-        panel_3b.add( chckbxNewCheckBox_3 );
+        chkBoxComputeMemory = new JCheckBox( "Z³o¿onoœæ pamiêciowa" );
+        chkBoxComputeMemory.addItemListener(new ItemListener() {
+            public void itemStateChanged(ItemEvent e) {
+                if(chkBoxComputeMemory.isSelected())
+                {
+                    CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_PAMIECIOWEJ = true;
+                }else
+                {
+                    CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_PAMIECIOWEJ = false;
+                }
+            }
+        });
+        chkBoxComputeMemory.setEnabled( false );
+        panel_3b.add( chkBoxComputeMemory );
 
         JPanel panel_10 = new JPanel();
         panel_10.setLayout( new GridLayout( 4, 1 ) );
@@ -285,10 +310,15 @@ public class App
                 if ( rbRandomWeight.isSelected() )
                 {
                     textArea.setText( "Wybrano wagê losow¹" );
+                    CommonVariables.getInstance().CZY_WAGOWY = true;
+                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = false;
+                    
                 }
                 else
                 {
                     textArea.setText( "Nie wybrano wagê losow¹" );
+                    CommonVariables.getInstance().CZY_WAGOWY = true;
+                    CommonVariables.getInstance().WAGI_ROWNE_JEDEN = true;
                 }
             }
         } );
@@ -334,10 +364,11 @@ public class App
                 int value = sliderDensityGraph.getValue();
                 double setValue = value / 100.0;
                 textArea.setText( "Slider value = " + setValue );
+                CommonVariables.getInstance().GESTOSC_GRAFU = setValue;
 
             }
         } );
-        sliderDensityGraph.setToolTipText( "Ustaw g\u0119sto\u015B\u0107 grafu z zakresu 0,01 - 1,00" );
+        sliderDensityGraph.setToolTipText( "Ustaw gêstoœæ grafu z zakresu 0,01 - 1,00" );
         sliderDensityGraph.setSnapToTicks( true );
         sliderDensityGraph.setPaintTicks( true );
         sliderDensityGraph.setPaintLabels( true );
@@ -411,9 +442,22 @@ public class App
                 textArea.append( "Iloœæ pomiarów dla zadania = " + tfNumberOfMeasurements.getText() + "\n" );
                 textArea.append( "Od = " + spinnerVertexFrom.getValue() + "\n" );
                 textArea.append( "Do = " + spinnerVertextTo.getValue() + "\n" );
+                
+                CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII = Integer.valueOf(tfNumberOfGraphs.getText());
+                CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA = Integer.valueOf( tfNumberOfMeasurements.getText());
+                CommonVariables.getInstance().SERIA_POMIAROW_OD = (int)spinnerVertexFrom.getValue();
+                CommonVariables.getInstance().SERIA_POMIAROW_DO = (int)spinnerVertextTo.getValue();
+                
+                
+                
             }
         } );
         btnStart.setForeground( new Color( 0, 0, 0 ) );
         panel_12.add( btnStart );
+    }
+    
+    
+    public static void runAlgorithms(){
+        
     }
 }
