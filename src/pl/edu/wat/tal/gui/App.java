@@ -71,20 +71,20 @@ import java.awt.event.ItemEvent;
 public class App
 {
 
-    private JFrame frame;
-    private JTextField tfNumberOfMeasurements;
-    private Messages singletonMessages;
-    private JTextField tfNumberOfGraphs;
+    private static JFrame frame;
+    private static JTextField tfNumberOfMeasurements;
+    private static Messages singletonMessages;
+    private static JTextField tfNumberOfGraphs;
     private static JTextArea textArea;
-    private JCheckBox chkBoxBruteForceAlgorithm;
-    private JCheckBox chkBoxLayerAlgorithm;
-    private JCheckBox chkBoxComputeComplexity;
-    private JSpinner spinnerVertexFrom;
-    private JSpinner spinnerVertextTo;
-    private JRadioButton rbRandomWeight;
-    private JRadioButton rbStateWeight;
-    private JSlider sliderDensityGraph;
-    private JCheckBox chkBoxComputeMemory;
+    private static JCheckBox chkBoxBruteForceAlgorithm;
+    private static JCheckBox chkBoxLayerAlgorithm;
+    private static JCheckBox chkBoxComputeComplexity;
+    private static JSpinner spinnerVertexFrom;
+    private static JSpinner spinnerVertextTo;
+    private static JRadioButton rbRandomWeight;
+    private static JRadioButton rbStateWeight;
+    private static JSlider sliderDensityGraph;
+    private static JCheckBox chkBoxComputeMemory;
 
     /**
      * Launch the application.
@@ -146,7 +146,7 @@ public class App
         textArea = new JTextArea();
         // panel.add( textArea );
 
-        // textArea.setEditable( false );
+        textArea.setEditable( false );
         JScrollPane scroll = new JScrollPane( textArea );
         scroll.setVerticalScrollBarPolicy( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
         panel.add( scroll );
@@ -459,19 +459,32 @@ public class App
                 // textArea.append( "Do = " + spinnerVertextTo.getValue() + "\n"
                 // );
 
-                if (/* !tfNumberOfGraphs.getText().toString().trim().isEmpty() && */!tfNumberOfGraphs.getText().trim().isEmpty()) ;
+                if ( /* !tfNumberOfGraphs.getText().toString().trim().isEmpty() && */!tfNumberOfGraphs.getText().equals(
+                        new String( "" ) ) )
                 {
-                    CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII = Integer.valueOf( tfNumberOfGraphs.getText().toString().trim() );
+                    CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII = Integer.valueOf( tfNumberOfGraphs.getText() );
                 }
-                if ( /*!tfNumberOfMeasurements.getText().trim().isEmpty() && */!tfNumberOfMeasurements.getText().contains( "" ) )
+                else
+                {
+                    System.out.println( "Podaj liczbê w iloœci generowanych grafów!" );
+                }
+                if ( /*!tfNumberOfMeasurements.getText().trim().isEmpty() && */!tfNumberOfMeasurements.getText().equals(
+                        new String( "" ) ) )
                 {
                     CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA = Integer.valueOf( tfNumberOfMeasurements.getText() );
                 }
-                //CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA = Integer.valueOf( tfNumberOfMeasurements.getText().trim() );
+                else
+                {
+                    System.out.println( "Podaj liczbê w iloœæ pomiarów dla zadania!" );
+                }
+                // CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA
+                // = Integer.valueOf( tfNumberOfMeasurements.getText().trim() );
                 CommonVariables.getInstance().SERIA_POMIAROW_OD = (int) spinnerVertexFrom.getValue();
                 CommonVariables.getInstance().SERIA_POMIAROW_DO = (int) spinnerVertextTo.getValue();
 
+                setDisableComponents();
                 runAlgorithms();
+                setEnableComponents();
 
             }
         } );
@@ -602,5 +615,37 @@ public class App
 
         // zapisz graf do pliku .tgf
         // tgfHelper.convertGraphToTgf(graf);
+    }
+
+    private static void setDisableComponents()
+    {
+        tfNumberOfMeasurements.setEnabled( false );
+        tfNumberOfGraphs.setEnabled( false );
+        chkBoxBruteForceAlgorithm.setEnabled( false );
+        chkBoxLayerAlgorithm.setEnabled( false );
+        chkBoxComputeComplexity.setEnabled( false );
+        spinnerVertexFrom.setEnabled( false );
+        spinnerVertextTo.setEnabled( false );
+        rbRandomWeight.setEnabled( false );
+        rbStateWeight.setEnabled( false );
+        sliderDensityGraph.setEnabled( false );
+        chkBoxComputeMemory.setEnabled( false );
+
+    }
+
+    private void setEnableComponents()
+    {
+
+        tfNumberOfMeasurements.setEnabled( true );
+        tfNumberOfGraphs.setEnabled( true );
+        chkBoxBruteForceAlgorithm.setEnabled( true );
+        chkBoxLayerAlgorithm.setEnabled( true );
+        chkBoxComputeComplexity.setEnabled( true );
+        spinnerVertexFrom.setEnabled( true );
+        spinnerVertextTo.setEnabled( true );
+        rbRandomWeight.setEnabled( true );
+        rbStateWeight.setEnabled( true );
+        sliderDensityGraph.setEnabled( true );
+        // chkBoxComputeMemory.setEnabled( true );
     }
 }
