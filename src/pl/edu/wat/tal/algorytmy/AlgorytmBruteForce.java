@@ -26,6 +26,7 @@ public class AlgorytmBruteForce {
 	private double minSumaWag = -1;
 	private Set<Wierzcholek> optymalnyWagowoFVS = null;
 	private int minFVS = -1;
+	private StringBuilder results;
 
 	public AlgorytmBruteForce(Graf graf) {
 		this.graf = graf;
@@ -101,11 +102,13 @@ public class AlgorytmBruteForce {
 	 * Mala zlozonosc pamieciowa - kolejne podzbiory sa generowane na biezaco, sprawdzane sa najpierw 0-elementowe, pozniej 1-elementowe itp.
 	 * Dzieki temu nie trzeba przeszukiwac bezsensownie duzych podzbiorow, gdy znalazlo sie juz minimalny zbior rozcyklajacy
 	 */
-	public void compute() {
-		
+	public StringBuilder compute() {
+		StringBuilder results =  new StringBuilder();
+	    
 		if(graf.getCyclomaticNumber() == 0) {
+		    results.append( "GRAF JEST ACYKLICZNY!\n");
 			System.out.println("GRAF JEST ACYKLICZNY!");
-			return;
+			return results;
 		}
 		
 		boolean znalezionoFVS = false;
@@ -189,19 +192,28 @@ public class AlgorytmBruteForce {
 		// KONIEC POMIARÓW !!!!!
 		// -----------
 		
+		results.append( "\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE\n" );
 		System.out.println();
 		System.out.println("ZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE");
 		
 		if(!znalezionoFVS) {
+		    results.append("Zbiór [FVS] pokrywa siê ze wszystkimi " + liczbaElementowPodzbioru + " wierzcho³kami grafu i jest nastêpuj¹cy: \n" );
+		    results.append( this.graf.getWierzcholki() );
 			System.out.println("Zbiór [FVS] pokrywa siê ze wszystkimi " + liczbaElementowPodzbioru + " wierzcho³kami grafu i jest nastêpuj¹cy: ");
 			System.out.println(this.graf.getWierzcholki());
 			obliczSumeWag(new HashSet<Wierzcholek>(this.graf.getWierzcholki()));
 		} else {
+		    results.append( "ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: " + optymalnyWagowoFVS.size() + "\n" );
+		    results.append( "OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:" + "\n" );
+		    results.append( optymalnyWagowoFVS + "\n" );
+		    results.append( "SUMA JEGO WAG WYNOSI: " + minSumaWag + "\n" );
 			System.out.println("ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: " + optymalnyWagowoFVS.size());
 			System.out.println("OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:");
 			System.out.println(optymalnyWagowoFVS);
 			System.out.println("SUMA JEGO WAG WYNOSI: " + minSumaWag);
-		}		
+		}	
+		
+		return results;
 	}
 	
 	public void obliczSumeWag(Set<Wierzcholek> s) {

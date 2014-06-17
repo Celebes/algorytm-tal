@@ -75,7 +75,7 @@ public class App
     private JTextField tfNumberOfMeasurements;
     private Messages singletonMessages;
     private JTextField tfNumberOfGraphs;
-    private JTextArea textArea;
+    private static JTextArea textArea;
     private JCheckBox chkBoxBruteForceAlgorithm;
     private JCheckBox chkBoxLayerAlgorithm;
     private JCheckBox chkBoxComputeComplexity;
@@ -100,7 +100,7 @@ public class App
                 {
                     App window = new App();
                     window.frame.setVisible( true );
-                    runAlgorithms();
+                    // runAlgorithms();
                 }
                 catch ( Exception e )
                 {
@@ -175,12 +175,12 @@ public class App
             {
                 if ( chkBoxBruteForceAlgorithm.isSelected() )
                 {
-                    textArea.setText( "Wybrano algorytm Brute Force" );
+                    // textArea.setText( "Wybrano algorytm Brute Force" );
                     CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE = true;
                 }
                 else
                 {
-                    textArea.setText( "Nie wybrano algorytm Brute Force" );
+                    // textArea.setText( "Nie wybrano algorytm Brute Force" );
                     CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE = false;
                 }
             }
@@ -207,12 +207,12 @@ public class App
             {
                 if ( chkBoxLayerAlgorithm.isSelected() )
                 {
-                    textArea.setText( "Wybrano algorytm Warstwowy" );
+                    // textArea.setText( "Wybrano algorytm Warstwowy" );
                     CommonVariables.getInstance().GENERUJ_ALGORYTM_WARSTWOWY = true;
                 }
                 else
                 {
-                    textArea.setText( "Nie wybrano algorytm Warstwowy" );
+                    // textArea.setText( "Nie wybrano algorytm Warstwowy" );
                     CommonVariables.getInstance().GENERUJ_ALGORYTM_WARSTWOWY = false;
                 }
             }
@@ -248,12 +248,14 @@ public class App
             {
                 if ( chkBoxComputeComplexity.isSelected() )
                 {
-                    textArea.setText( "Wybrano pomiar z³o¿onoœci obliczeniowej" );
+                    // textArea.setText(
+                    // "Wybrano pomiar z³o¿onoœci obliczeniowej" );
                     CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_OBLICZENIOWEJ = true;
                 }
                 else
                 {
-                    textArea.setText( "Nie wybrano pomiar z³o¿onoœci obliczeniowej" );
+                    // textArea.setText(
+                    // "Nie wybrano pomiar z³o¿onoœci obliczeniowej" );
                     CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_OBLICZENIOWEJ = false;
                 }
             }
@@ -263,17 +265,20 @@ public class App
         panel_3b.add( chkBoxComputeComplexity );
 
         chkBoxComputeMemory = new JCheckBox( "Z³o¿onoœæ pamiêciowa" );
-        chkBoxComputeMemory.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                if(chkBoxComputeMemory.isSelected())
+        chkBoxComputeMemory.addItemListener( new ItemListener()
+        {
+            public void itemStateChanged( ItemEvent e )
+            {
+                if ( chkBoxComputeMemory.isSelected() )
                 {
                     CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_PAMIECIOWEJ = true;
-                }else
+                }
+                else
                 {
                     CommonVariables.getInstance().GENERUJ_POMIAR_ZLOZONOSCI_PAMIECIOWEJ = false;
                 }
             }
-        });
+        } );
         chkBoxComputeMemory.setEnabled( false );
         panel_3b.add( chkBoxComputeMemory );
 
@@ -315,14 +320,14 @@ public class App
             {
                 if ( rbRandomWeight.isSelected() )
                 {
-                    textArea.setText( "Wybrano wagê losow¹" );
+                    // textArea.setText( "Wybrano wagê losow¹" );
                     CommonVariables.getInstance().CZY_WAGOWY = true;
                     CommonVariables.getInstance().WAGI_ROWNE_JEDEN = false;
-                    
+
                 }
                 else
                 {
-                    textArea.setText( "Nie wybrano wagê losow¹" );
+                    // textArea.setText( "Nie wybrano wagê losow¹" );
                     CommonVariables.getInstance().CZY_WAGOWY = true;
                     CommonVariables.getInstance().WAGI_ROWNE_JEDEN = true;
                 }
@@ -339,11 +344,11 @@ public class App
             {
                 if ( rbStateWeight.isSelected() )
                 {
-                    textArea.setText( "Wybrano sta³¹ wagê" );
+                    // textArea.setText( "Wybrano sta³¹ wagê" );
                 }
                 else
                 {
-                    textArea.setText( "Nie wybrano sta³ej wagi" );
+                    // textArea.setText( "Nie wybrano sta³ej wagi" );
                 }
             }
         } );
@@ -369,7 +374,7 @@ public class App
             {
                 int value = sliderDensityGraph.getValue();
                 double setValue = value / 100.0;
-                textArea.setText( "Slider value = " + setValue );
+                // textArea.setText( "Slider value = " + setValue );
                 CommonVariables.getInstance().GESTOSC_GRAFU = setValue;
 
             }
@@ -443,112 +448,147 @@ public class App
         {
             public void actionPerformed( ActionEvent arg0 )
             {
-                textArea.setText( "Wciœniêto Start i rozpoczêto symulacjê\n" );
-                textArea.append( "Liczba generowanych grafów = " + tfNumberOfGraphs.getText() + "\n" );
-                textArea.append( "Iloœæ pomiarów dla zadania = " + tfNumberOfMeasurements.getText() + "\n" );
-                textArea.append( "Od = " + spinnerVertexFrom.getValue() + "\n" );
-                textArea.append( "Do = " + spinnerVertextTo.getValue() + "\n" );
-                
-                CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII = Integer.valueOf(tfNumberOfGraphs.getText());
-                CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA = Integer.valueOf( tfNumberOfMeasurements.getText());
-                CommonVariables.getInstance().SERIA_POMIAROW_OD = (int)spinnerVertexFrom.getValue();
-                CommonVariables.getInstance().SERIA_POMIAROW_DO = (int)spinnerVertextTo.getValue();
-                
-                
-                
+                // textArea.setText( "Wciœniêto Start i rozpoczêto symulacjê\n"
+                // );
+                // textArea.append( "Liczba generowanych grafów = " +
+                // tfNumberOfGraphs.getText() + "\n" );
+                // textArea.append( "Iloœæ pomiarów dla zadania = " +
+                // tfNumberOfMeasurements.getText() + "\n" );
+                // textArea.append( "Od = " + spinnerVertexFrom.getValue() +
+                // "\n" );
+                // textArea.append( "Do = " + spinnerVertextTo.getValue() + "\n"
+                // );
+
+                if (/* !tfNumberOfGraphs.getText().toString().trim().isEmpty() && */!tfNumberOfGraphs.getText().trim().isEmpty()) ;
+                {
+                    CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII = Integer.valueOf( tfNumberOfGraphs.getText().toString().trim() );
+                }
+                if ( /*!tfNumberOfMeasurements.getText().trim().isEmpty() && */!tfNumberOfMeasurements.getText().contains( "" ) )
+                {
+                    CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA = Integer.valueOf( tfNumberOfMeasurements.getText() );
+                }
+                //CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA = Integer.valueOf( tfNumberOfMeasurements.getText().trim() );
+                CommonVariables.getInstance().SERIA_POMIAROW_OD = (int) spinnerVertexFrom.getValue();
+                CommonVariables.getInstance().SERIA_POMIAROW_DO = (int) spinnerVertextTo.getValue();
+
+                runAlgorithms();
+
             }
         } );
         btnStart.setForeground( new Color( 0, 0, 0 ) );
         panel_12.add( btnStart );
     }
-    
-    
-    public static void runAlgorithms(){
+
+    public static void runAlgorithms()
+    {
+        StringBuilder results = new StringBuilder();
         GrafGenerator gg = new GrafGenerator();
         AlgorytmBruteForce abf;
         AlgorytmLayering al;
         StatisticsAlgorithmsHelper stAlgorithmsHelperForBF;
         StatisticsAlgorithmsHelper stAlgorithmsHelperForLayer;
-        ArrayList<ArrayList<Long>> bfAlgorithmResults = new ArrayList<ArrayList<Long>>(CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII);
-        ArrayList<ArrayList<Long>> layerAlgorithmResults = new ArrayList<ArrayList<Long>>(CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII);
-        
+        ArrayList<ArrayList<Long>> bfAlgorithmResults = new ArrayList<ArrayList<Long>>(
+                CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII );
+        ArrayList<ArrayList<Long>> layerAlgorithmResults = new ArrayList<ArrayList<Long>>(
+                CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII );
 
-        //inicjalizacja elementów listy w zale¿noœci od liczby zadañ
-        for(int i=0; i<CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; i++)
+        // inicjalizacja elementów listy w zale¿noœci od liczby zadañ
+        for ( int i = 0; i < CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; i++ )
         {
-            bfAlgorithmResults.add(new ArrayList<Long>());
-            layerAlgorithmResults.add(new ArrayList<Long>());
+            bfAlgorithmResults.add( new ArrayList<Long>() );
+            layerAlgorithmResults.add( new ArrayList<Long>() );
         }
-        
-        int iloscSerii = CommonVariables.getInstance().SERIA_POMIAROW_DO - CommonVariables.getInstance().SERIA_POMIAROW_OD + 1;
-        
-        for(int i=0; i<iloscSerii; i++) {
+
+        int iloscSerii = CommonVariables.getInstance().SERIA_POMIAROW_DO
+                         - CommonVariables.getInstance().SERIA_POMIAROW_OD + 1;
+
+        for ( int i = 0; i < iloscSerii; i++ )
+        {
             int aktualnaSeria = CommonVariables.getInstance().SERIA_POMIAROW_OD + i;
-            System.out.println("Seria pomiarów numer [" + (i+1) + "], rozmiar problemu [" + aktualnaSeria + "]");
-            
-            for(int j=0; j<CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; j++) {
-                Graf g = gg.generujGrafCykliczny(aktualnaSeria, CommonVariables.getInstance().LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE, CommonVariables.getInstance().CZY_WAGOWY, CommonVariables.getInstance().WAGI_ROWNE_JEDEN);
-                System.out.println("    Wygenerowano graf numer [" + (j+1) + "]");
-                
-                for(int k=0; k<CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA; k++) {
-                    System.out.println("        Przeprowadzono pomiar numer [" + (k+1) + "]");
-                    
-                    abf = new AlgorytmBruteForce(g);
-                    al = new AlgorytmLayering(g);
-                    stAlgorithmsHelperForBF = new StatisticsAlgorithmsHelper(CommonVariables.ALGORITHM_BRUTE_FORCE);
-                    stAlgorithmsHelperForLayer = new StatisticsAlgorithmsHelper(CommonVariables.ALGORITHM_LAYERING);
-                    
-                    stAlgorithmsHelperForBF.startCalculateComplexity();
-                    long bytesStart = Runtime.getRuntime().freeMemory();          
-                    abf.compute();
-                    long bytesStop = Runtime.getRuntime().freeMemory();
-                    //System.out.println("pamiec: " + (bytesStart - bytesStop));
-                    stAlgorithmsHelperForBF.stopCalculateComplexity();
-                    bfAlgorithmResults.get(j).add(stAlgorithmsHelperForBF.showResult());
-                    
-                    System.out.println("\n-----------------------------------------------------");
-                    
-                    stAlgorithmsHelperForLayer.startCalculateComplexity();
-                    long bytesStart2 = Runtime.getRuntime().freeMemory();   
-                    al.compute();
-                    long bytesStop2 = Runtime.getRuntime().freeMemory();
-                    //System.out.println("pamiec2: " + (bytesStart2 - bytesStop2));
-                    stAlgorithmsHelperForLayer.stopCalculateComplexity();
-                    layerAlgorithmResults.get(j).add(stAlgorithmsHelperForLayer.showResult());
-                    
-                    System.out.println("\n==========================================================================================================");
-                }
-                
-                System.out.println("\n-----------------------------------------------------");
-                System.out.println("Z£O¯NOŒÆ ALGORYTMU BRUTE FORCE DLA " + (j + 1) + " ZADANIA: ");
-                int y = 1;
-                for(Long result : bfAlgorithmResults.get(j))
+            results.append( "Seria pomiarów numer [" + ( i + 1 ) + "], rozmiar problemu [" + aktualnaSeria + "]\n" );
+            System.out.println( "Seria pomiarów numer [" + ( i + 1 ) + "], rozmiar problemu [" + aktualnaSeria + "]" );
+
+            for ( int j = 0; j < CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; j++ )
+            {
+                Graf g = gg.generujGrafCykliczny( aktualnaSeria,
+                        CommonVariables.getInstance().LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE,
+                        CommonVariables.getInstance().CZY_WAGOWY, CommonVariables.getInstance().WAGI_ROWNE_JEDEN );
+                results.append( "    Wygenerowano graf numer [" + ( j + 1 ) + "]\n" );
+                System.out.println( "    Wygenerowano graf numer [" + ( j + 1 ) + "]" );
+
+                for ( int k = 0; k < CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA; k++ )
                 {
-                    System.out.println("URUCHOMIENIE " + y + ": " + result);
+                    results.append( "        Przeprowadzono pomiar numer [" + ( k + 1 ) + "]" );
+                    System.out.println( "        Przeprowadzono pomiar numer [" + ( k + 1 ) + "]" );
+
+                    abf = new AlgorytmBruteForce( g );
+                    al = new AlgorytmLayering( g );
+                    stAlgorithmsHelperForBF = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_BRUTE_FORCE );
+                    stAlgorithmsHelperForLayer = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_LAYERING );
+
+                    stAlgorithmsHelperForBF.startCalculateComplexity();
+                    long bytesStart = Runtime.getRuntime().freeMemory();
+                    StringBuilder resAbf = abf.compute();
+                    results.append( resAbf.toString() );
+                    long bytesStop = Runtime.getRuntime().freeMemory();
+                    // System.out.println("pamiec: " + (bytesStart -
+                    // bytesStop));
+                    stAlgorithmsHelperForBF.stopCalculateComplexity();
+                    bfAlgorithmResults.get( j ).add( stAlgorithmsHelperForBF.showResult() );
+
+                    results.append( "\n-----------------------------------------------------\n" );
+                    System.out.println( "\n-----------------------------------------------------" );
+
+                    stAlgorithmsHelperForLayer.startCalculateComplexity();
+                    long bytesStart2 = Runtime.getRuntime().freeMemory();
+                    StringBuilder resLayer = al.compute();
+                    results.append( resLayer.toString() );
+
+                    long bytesStop2 = Runtime.getRuntime().freeMemory();
+                    // System.out.println("pamiec2: " + (bytesStart2 -
+                    // bytesStop2));
+                    stAlgorithmsHelperForLayer.stopCalculateComplexity();
+                    layerAlgorithmResults.get( j ).add( stAlgorithmsHelperForLayer.showResult() );
+
+                    results.append( "\n==========================================================================================================\n" );
+                    System.out.println( "\n==========================================================================================================" );
+                }
+
+                results.append( "\n-----------------------------------------------------\n" );
+                results.append( "Z£O¯NOŒÆ ALGORYTMU BRUTE FORCE DLA " + ( j + 1 ) + " ZADANIA: \n" );
+                System.out.println( "\n-----------------------------------------------------" );
+                System.out.println( "Z£O¯NOŒÆ ALGORYTMU BRUTE FORCE DLA " + ( j + 1 ) + " ZADANIA: " );
+                int y = 1;
+                for ( Long result : bfAlgorithmResults.get( j ) )
+                {
+                    results.append( "URUCHOMIENIE " + y + ": " + result + "\n" );
+                    System.out.println( "URUCHOMIENIE " + y + ": " + result );
                     y++;
                 }
-                System.out.println("\n-----------------------------------------------------");
-                System.out.println("Z£O¯ONOŒÆ ALGORYTMU WARSTWOWEGO DLA " + (j + 1) + " ZADANIA: ");
+                results.append( "\n-----------------------------------------------------\n" );
+                results.append( "Z£O¯ONOŒÆ ALGORYTMU WARSTWOWEGO DLA " + ( j + 1 ) + " ZADANIA: \n" );
+                System.out.println( "\n-----------------------------------------------------" );
+                System.out.println( "Z£O¯ONOŒÆ ALGORYTMU WARSTWOWEGO DLA " + ( j + 1 ) + " ZADANIA: " );
                 int z = 1;
-                for(Long result : layerAlgorithmResults.get(j))
+                for ( Long result : layerAlgorithmResults.get( j ) )
                 {
-                    System.out.println("URUCHOMIENIE " + z + ": " + result);
+                    results.append( "URUCHOMIENIE " + z + ": " + result + "\n" );
+                    System.out.println( "URUCHOMIENIE " + z + ": " + result );
                     z++;
                 }
             }
         }
-        
+
+        textArea.append( results.toString() );
         // jesli wszystko OK to sparsuj plik
         /*TGFHelper tgfHelper = new TGFHelper(file);
         Graf graf = tgfHelper.parseTgfFile();
         graf.przyporzadkujLosoweWagi();
         
         System.out.println(graf);*/
-        
+
         // rob cos dalej z grafem..
-        
-        
-        
+
         /*AlgorytmBruteForce abf = new AlgorytmBruteForce(graf);
         abf.compute();
         
@@ -556,10 +596,10 @@ public class App
         
         AlgorytmLayering al = new AlgorytmLayering(graf);
         al.compute();*/
-        
+
         // to tylko do testow - uzywac zamiast tego metody compute()!
-        //abf.computeZlozonePamieciowo();
-        
+        // abf.computeZlozonePamieciowo();
+
         // zapisz graf do pliku .tgf
         // tgfHelper.convertGraphToTgf(graf);
     }
