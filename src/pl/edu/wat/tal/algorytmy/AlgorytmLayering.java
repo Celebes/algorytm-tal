@@ -7,6 +7,8 @@ import java.util.Set;
 
 import pl.edu.wat.tal.graf.Graf;
 import pl.edu.wat.tal.graf.Wierzcholek;
+import pl.edu.wat.tal.helper.CommonVariables;
+import pl.edu.wat.tal.helper.StatisticsAlgorithmsHelper;
 
 /*
  * ALGORYTM APROKSYMACYJNY - oparty na warstwach
@@ -20,16 +22,19 @@ public class AlgorytmLayering
 
     private double minSumaWag = 0;
     private StringBuilder results;
+    private StatisticsAlgorithmsHelper statisHelper;
 
     public AlgorytmLayering( Graf graf )
     {
         this.graf = graf;
+        statisHelper = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_LAYERING );
     }
 
     public StringBuilder compute()
-    { 
+    {
         results = new StringBuilder();
 
+        
         if ( !graf.isWagowy() )
         {
             results.append( "Algorytm warstwowy dzia³a jedynie dla grafów posiadaj¹cych wagi na wierzcho³kach!\n" );
@@ -50,6 +55,10 @@ public class AlgorytmLayering
         // utworz kopie grafu
         Graf grafH = this.graf.klonuj();
 
+        // -----------
+        // START POMIARÓW !!!!!
+        // -----------
+        statisHelper.startCalculateComplexity();
         // powtarzaj dopoki graf jest cykliczny
         while ( grafH.getCyclomaticNumber() != 0 )
         {
@@ -75,6 +84,11 @@ public class AlgorytmLayering
             // usun wierzcholki z wagami rownymi 0
             usunZeroweWagi( grafH );
         }
+        // -----------
+        // KONIEC POMIARÓW !!!!!
+        // -----------
+        statisHelper.stopCalculateComplexity();
+        
 
         // oblicz sume wag fvs
         for ( Wierzcholek w : fvs )
@@ -98,7 +112,7 @@ public class AlgorytmLayering
         System.out.println( "MINIMALNY ZBIÓR ROZCYKLAJ¥CY = " + fvs );
         System.out.println( "ROZMIAR ZBIORU [FVS] TO: " + fvs.size() );
         System.out.println( "SUMA WAG JEGO WIERZCHOLKOW = " + minSumaWag );
-        
+
         return results;
     }
 
@@ -180,6 +194,12 @@ public class AlgorytmLayering
         {
             grafH.removeWierzcholek( w.getNumer() );
         }
+    }
+    
+    public Long getCalculateComplexityWrapper()
+    {
+
+        return statisHelper.showResult();
     }
 
 }

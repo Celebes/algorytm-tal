@@ -536,32 +536,34 @@ public class App
 
                     abf = new AlgorytmBruteForce( g );
                     al = new AlgorytmLayering( g );
-                    stAlgorithmsHelperForBF = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_BRUTE_FORCE );
+                    //stAlgorithmsHelperForBF = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_BRUTE_FORCE );
                     stAlgorithmsHelperForLayer = new StatisticsAlgorithmsHelper( CommonVariables.ALGORITHM_LAYERING );
 
-                    stAlgorithmsHelperForBF.startCalculateComplexity();
-                    long bytesStart = Runtime.getRuntime().freeMemory();
+                    //stAlgorithmsHelperForBF.startCalculateComplexity();
+                    //long bytesStart = Runtime.getRuntime().freeMemory();
                     StringBuilder resAbf = abf.compute();
                     results.append( resAbf.toString() );
-                    long bytesStop = Runtime.getRuntime().freeMemory();
+                    //long bytesStop = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec: " + (bytesStart -
                     // bytesStop));
-                    stAlgorithmsHelperForBF.stopCalculateComplexity();
-                    bfAlgorithmResults.get( j ).add( stAlgorithmsHelperForBF.showResult() );
+                    //stAlgorithmsHelperForBF.stopCalculateComplexity();
+                    //bfAlgorithmResults.get( j ).add( stAlgorithmsHelperForBF.showResult() );
+                    bfAlgorithmResults.get( j ).add( abf.getCalculateComplexityWrapper() );
 
                     results.append( "\n-----------------------------------------------------\n" );
                     System.out.println( "\n-----------------------------------------------------" );
 
-                    stAlgorithmsHelperForLayer.startCalculateComplexity();
-                    long bytesStart2 = Runtime.getRuntime().freeMemory();
+                    //stAlgorithmsHelperForLayer.startCalculateComplexity();
+                    //long bytesStart2 = Runtime.getRuntime().freeMemory();
                     StringBuilder resLayer = al.compute();
                     results.append( resLayer.toString() );
 
-                    long bytesStop2 = Runtime.getRuntime().freeMemory();
+                    //long bytesStop2 = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec2: " + (bytesStart2 -
                     // bytesStop2));
-                    stAlgorithmsHelperForLayer.stopCalculateComplexity();
-                    layerAlgorithmResults.get( j ).add( stAlgorithmsHelperForLayer.showResult() );
+                    //stAlgorithmsHelperForLayer.stopCalculateComplexity();
+                   //layerAlgorithmResults.get( j ).add( stAlgorithmsHelperForLayer.showResult() );
+                    layerAlgorithmResults.get( j ).add( al.getCalculateComplexityWrapper());
 
                     results.append( "\n==========================================================================================================\n" );
                     System.out.println( "\n==========================================================================================================" );
