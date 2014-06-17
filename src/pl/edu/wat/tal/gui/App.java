@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -27,6 +28,7 @@ import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ChangeEvent;
@@ -110,7 +112,7 @@ public class App
     private void initialize()
     {
         frame = new JFrame( "FVS ALGORITHM GURNIAK JEDYNAK" );
-        frame.setBounds( 100, 100, 815, 498 );
+        frame.setBounds( 350, 150, 1215, 798 );
         frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         frame.getContentPane().setLayout( new GridLayout( 1, 0, 0, 0 ) );
 
@@ -283,6 +285,7 @@ public class App
         tfNumberOfGraphs.setColumns( 10 );
         tfNumberOfGraphs.setBounds( 10, 8, 48, 20 );
         panel_7.add( tfNumberOfGraphs );
+        tfNumberOfGraphs.setText(CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII + "");
 
         JPanel panel_8 = new JPanel();
         panel_10.add( panel_8 );
@@ -397,7 +400,7 @@ public class App
         panel_4.add( spinnerVertexFrom );
 
         spinnerVertextTo = new JSpinner();
-        spinnerVertextTo.setModel( new SpinnerNumberModel( 16, 3, 16, 1 ) );
+        spinnerVertextTo.setModel( new SpinnerNumberModel( 3, 3, 16, 1 ) );
         spinnerVertextTo.setBounds( 119, 11, 39, 20 );
         panel_4.add( spinnerVertextTo );
 
@@ -418,6 +421,8 @@ public class App
         tfNumberOfMeasurements.setBounds( 10, 11, 48, 20 );
         panel_6.add( tfNumberOfMeasurements );
         tfNumberOfMeasurements.setColumns( 10 );
+        
+        tfNumberOfMeasurements.setText(CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA + "");
 
         JLabel lblNewLabel_3 = new JLabel( "Iloœæ pomiarów dla zadania" );
         lblNewLabel_3.setBounds( 204, 14, 185, 14 );
@@ -474,7 +479,15 @@ public class App
                 CommonVariables.getInstance().SERIA_POMIAROW_DO = (int) spinnerVertextTo.getValue();
 
                 setDisableComponents();
-                runAlgorithms();
+                
+                SwingUtilities.invokeLater(new Runnable(){
+                    public void run(){
+                    	//JOptionPane.showMessageDialog(frame, "Proszê czekaæ...");
+                    	runAlgorithms();
+                    }
+                }); 
+                
+                //runAlgorithms();
                 setEnableComponents();
 
             }
@@ -485,6 +498,7 @@ public class App
 
     public static void runAlgorithms()
     {
+    	textArea.setText("");
         StringBuilder results = new StringBuilder();
         GrafGenerator gg = new GrafGenerator();
         AlgorytmBruteForce abf;
@@ -510,20 +524,24 @@ public class App
         for ( int i = 0; i < iloscSerii; i++ )
         {
             int aktualnaSeria = CommonVariables.getInstance().SERIA_POMIAROW_OD + i;
-            results.append( "Seria pomiarów numer [" + ( i + 1 ) + "], rozmiar problemu [" + aktualnaSeria + "]\n" );
+            //results.append( "Seria pomiarów numer [" + ( i + 1 ) + "], rozmiar problemu [" + aktualnaSeria + "]\n" );
+            textArea.append( "Seria pomiarów numer [" + ( i + 1 ) + "], rozmiar problemu [" + aktualnaSeria + "]:\n\n" );
             System.out.println( "Seria pomiarów numer [" + ( i + 1 ) + "], rozmiar problemu [" + aktualnaSeria + "]" );
+            
 
             for ( int j = 0; j < CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; j++ )
             {
                 Graf g = gg.generujGrafCykliczny( aktualnaSeria,
                         CommonVariables.getInstance().LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE,
-                        CommonVariables.getInstance().CZY_WAGOWY, CommonVariables.getInstance().WAGI_ROWNE_JEDEN );
-                results.append( "    Wygenerowano graf numer [" + ( j + 1 ) + "]\n" );
+                        CommonVariables.getInstance().CZY_WAGOWY, CommonVariables.getInstance().WAGI_ROWNE_JEDEN, CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN, CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI);
+                //results.append( "Wygenerowano graf numer [" + ( j + 1 ) + "]\n" );
+                textArea.append( "	Wygenerowano graf numer [" + ( j + 1 ) + "]: " + g + "\n\n" );
                 System.out.println( "    Wygenerowano graf numer [" + ( j + 1 ) + "]" );
-
+                	
                 for ( int k = 0; k < CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA; k++ )
                 {
-                    results.append( "        Przeprowadzono pomiar numer [" + ( k + 1 ) + "]" );
+                    //results.append( "        Przeprowadzono pomiar numer [" + ( k + 1 ) + "]" );
+                	textArea.append( "		Przeprowadzono pomiar numer [" + ( k + 1 ) + "]:\n\n" );
                     System.out.println( "        Przeprowadzono pomiar numer [" + ( k + 1 ) + "]" );
 
                     abf = new AlgorytmBruteForce( g );
@@ -535,7 +553,8 @@ public class App
                     // stAlgorithmsHelperForBF.startCalculateComplexity();
                     // long bytesStart = Runtime.getRuntime().freeMemory();
                     StringBuilder resAbf = abf.compute();
-                    results.append( resAbf.toString() );
+                    //results.append( resAbf.toString() );
+                    textArea.append( resAbf.toString() );
                     // long bytesStop = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec: " + (bytesStart -
                     // bytesStop));
@@ -544,13 +563,14 @@ public class App
                     // stAlgorithmsHelperForBF.showResult() );
                     bfAlgorithmResults.get( j ).add( abf.getCalculateComplexityWrapper() );
 
-                    results.append( "\n-----------------------------------------------------\n" );
+                    //results.append( "\n-----------------------------------------------------\n" );
                     System.out.println( "\n-----------------------------------------------------" );
 
                     // stAlgorithmsHelperForLayer.startCalculateComplexity();
                     // long bytesStart2 = Runtime.getRuntime().freeMemory();
                     StringBuilder resLayer = al.compute();
-                    results.append( resLayer.toString() );
+                    //results.append( resLayer.toString() );
+                    textArea.append( resLayer.toString() );
 
                     // long bytesStop2 = Runtime.getRuntime().freeMemory();
                     // System.out.println("pamiec2: " + (bytesStart2 -
@@ -560,12 +580,13 @@ public class App
                     // stAlgorithmsHelperForLayer.showResult() );
                     layerAlgorithmResults.get( j ).add( al.getCalculateComplexityWrapper() );
 
-                    results.append( "\n==========================================================================================================\n" );
+                    //results.append( "\n==========================================================================================================\n" );
                     System.out.println( "\n==========================================================================================================" );
+                    textArea.append("\n");
                 }
 
-                results.append( "\n-----------------------------------------------------\n" );
-                results.append( "Z£O¯NOŒÆ ALGORYTMU BRUTE FORCE DLA " + ( j + 1 ) + " ZADANIA: \n" );
+                //results.append( "\n-----------------------------------------------------\n" );
+                //results.append( "Z£O¯NOŒÆ ALGORYTMU BRUTE FORCE DLA " + ( j + 1 ) + " ZADANIA: \n" );
                 System.out.println( "\n-----------------------------------------------------" );
                 System.out.println( "Z£O¯NOŒÆ ALGORYTMU BRUTE FORCE DLA " + ( j + 1 ) + " ZADANIA: " );
                 int y = 1;
@@ -575,8 +596,8 @@ public class App
                     System.out.println( "URUCHOMIENIE " + y + ": " + result );
                     y++;
                 }
-                results.append( "\n-----------------------------------------------------\n" );
-                results.append( "Z£O¯ONOŒÆ ALGORYTMU WARSTWOWEGO DLA " + ( j + 1 ) + " ZADANIA: \n" );
+                //results.append( "\n-----------------------------------------------------\n" );
+                //results.append( "Z£O¯ONOŒÆ ALGORYTMU WARSTWOWEGO DLA " + ( j + 1 ) + " ZADANIA: \n" );
                 System.out.println( "\n-----------------------------------------------------" );
                 System.out.println( "Z£O¯ONOŒÆ ALGORYTMU WARSTWOWEGO DLA " + ( j + 1 ) + " ZADANIA: " );
                 int z = 1;
@@ -591,12 +612,15 @@ public class App
                 resultsForCompare = new HashMap<>();
                 resultsForCompare.put( CommonVariables.ALGORITHM_BRUTE_FORCE, bfAlgorithmResults.get( j ) );
                 resultsForCompare.put( CommonVariables.ALGORITHM_LAYERING, layerAlgorithmResults.get( j ) );
-                results.append( StatisticsAlgorithmsHelper.compareAlgorithms( resultsForCompare ) );
-
+                //results.append( StatisticsAlgorithmsHelper.compareAlgorithms( resultsForCompare ) );
+                textArea.append("\n");
             }
+            
+            textArea.append("\n");
         }
 
-        textArea.append( results.toString() );
+        //textArea.append( results.toString() );
+        results.setLength(0);
         // jesli wszystko OK to sparsuj plik
         /*TGFHelper tgfHelper = new TGFHelper(file);
         Graf graf = tgfHelper.parseTgfFile();

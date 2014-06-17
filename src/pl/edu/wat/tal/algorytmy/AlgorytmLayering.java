@@ -1,8 +1,10 @@
 package pl.edu.wat.tal.algorytmy;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import pl.edu.wat.tal.graf.Graf;
@@ -38,14 +40,14 @@ public class AlgorytmLayering
         
         if ( !graf.isWagowy() )
         {
-            results.append( "Algorytm warstwowy dzia³a jedynie dla grafów posiadaj¹cych wagi na wierzcho³kach!\n" );
+            //results.append( "Algorytm warstwowy dzia³a jedynie dla grafów posiadaj¹cych wagi na wierzcho³kach!\n" );
             System.out.println( "Algorytm warstwowy dzia³a jedynie dla grafów posiadaj¹cych wagi na wierzcho³kach!" );
             return results;
         }
 
         if ( graf.getCyclomaticNumber() == 0 )
         {
-            results.append( "GRAF JEST ACYKLICZNY!\n" );
+            //results.append( "GRAF JEST ACYKLICZNY!\n" );
             System.out.println( "GRAF JEST ACYKLICZNY!" );
             return results;
         }
@@ -61,6 +63,13 @@ public class AlgorytmLayering
         // -----------
         statisHelper.startCalculateComplexity();
         // powtarzaj dopoki graf jest cykliczny
+        
+        // przechowujemy kolejne zbiory F
+        //Set<Set<Wierzcholek>> Fwszystkie = new HashSet<Set<Wierzcholek>>();
+        
+        Map<Integer, List<Wierzcholek>> Fwszystkie = new HashMap<>();
+        int aktualnaIteracja = 0;
+        
         while ( grafH.getCyclomaticNumber() != 0 )
         {
 
@@ -85,9 +94,25 @@ public class AlgorytmLayering
             // pobierz wierzcholki z wagami rownymi 0
             List<Wierzcholek> F = pobierzZeroweWagi( grafH );
             
-            // wybierz FVS z F
-            Set<Set<Wierzcholek>> acykliczne = new HashSet<Set<Wierzcholek>>();
-            Set<Set<Wierzcholek>> wszystkiePodzbiory = SetHelper.generujWszystkiePodzbiory(new HashSet<Wierzcholek>(F));
+            Fwszystkie.put(aktualnaIteracja, F);
+            
+            aktualnaIteracja++;
+            
+            // usun wierzcholki z wagami rownymi 0
+            usunZeroweWagi(grafH);
+        }
+        
+        // rozwijamy..
+        // int k = aktualnaIteracja;
+        aktualnaIteracja--;
+        
+        for(int k = aktualnaIteracja; k>=0; k--) {
+        	// dodajemy od tylu uzyskane F, jesli zaden ich podzbior nie powoduje acyklicznosci, to dodajemy w calosci
+        	
+        	List<Wierzcholek> Faktualne = Fwszystkie.get(Integer.valueOf(k));
+        	
+        	Set<Set<Wierzcholek>> acykliczne = new HashSet<Set<Wierzcholek>>();
+            Set<Set<Wierzcholek>> wszystkiePodzbiory = SetHelper.generujWszystkiePodzbiory(new HashSet<Wierzcholek>(Faktualne));
             
             for ( Set<Wierzcholek> s : wszystkiePodzbiory )
             {
@@ -105,6 +130,11 @@ public class AlgorytmLayering
             }
             
             int min = Integer.MAX_VALUE;
+            
+            if(acykliczne.isEmpty()) {
+            	fvs.addAll(Faktualne);
+            	continue;
+            }
 
             for ( Set<Wierzcholek> s : acykliczne )
             {
@@ -122,10 +152,8 @@ public class AlgorytmLayering
                     break;
                 }
             }
-            
-            // usun wierzcholki z wagami rownymi 0
-            usunZeroweWagi(grafH);
         }
+        
         // -----------
         // KONIEC POMIARÓW !!!!!
         // -----------
@@ -146,10 +174,11 @@ public class AlgorytmLayering
             }
         }
 
-        results.append( "\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE WARSTWOWYM" + "\n" );
+        /*results.append( "\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE WARSTWOWYM" + "\n" );
         results.append( "MINIMALNY ZBIÓR ROZCYKLAJ¥CY = " + fvs + "\n" );
         results.append( "ROZMIAR ZBIORU [FVS] TO: " + fvs.size() + "\n" );
-        results.append( "SUMA WAG JEGO WIERZCHOLKOW = " + minSumaWag + "\n" );
+        results.append( "SUMA WAG JEGO WIERZCHOLKOW = " + minSumaWag + "\n" );*/
+        results.append("			Wynik Layering: " + fvs + ", suma wag: [" + minSumaWag + "]\n" );
         System.out.println( "\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE WARSTWOWYM" );
         System.out.println( "MINIMALNY ZBIÓR ROZCYKLAJ¥CY = " + fvs );
         System.out.println( "ROZMIAR ZBIORU [FVS] TO: " + fvs.size() );

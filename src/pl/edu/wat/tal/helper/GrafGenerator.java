@@ -29,7 +29,7 @@ public class GrafGenerator
      */
 
     public Graf generujGrafCykliczny( int liczbaWierzcholkow, int iloscSpojnychSkladowych, boolean wagowy,
-            boolean wagiRowneJeden )
+            boolean wagiRowneJeden, boolean wagiLosoweBezPowtorzen, boolean wagiLosoweZPowtorzeniami )
     {
 
         if ( liczbaWierzcholkow < 3 )
@@ -288,9 +288,13 @@ public class GrafGenerator
             {
                 g.przyporzadkujWagiJeden();
             }
-            else
+            else if( wagiLosoweBezPowtorzen)
             {
                 g.przyporzadkujLosoweWagi();
+            }
+            else if(wagiLosoweZPowtorzeniami)
+            {
+            	g.przyporzadkujLosoweWagiZPowtorzeniami();
             }
         }
 

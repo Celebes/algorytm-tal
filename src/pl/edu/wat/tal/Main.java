@@ -45,7 +45,7 @@ public class Main {
 						System.out.println("Seria pomiarów numer [" + (i+1) + "], rozmiar problemu [" + aktualnaSeria + "]");
 						
 						for(int j=0; j<CommonVariables.getInstance().LICZBA_GENEROWANYCH_GRAFOW_W_SERII; j++) {
-							Graf g = gg.generujGrafCykliczny(aktualnaSeria, CommonVariables.getInstance().LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE, CommonVariables.getInstance().CZY_WAGOWY, CommonVariables.getInstance().WAGI_ROWNE_JEDEN);
+							Graf g = gg.generujGrafCykliczny(aktualnaSeria, CommonVariables.getInstance().LICZBA_SPOJNYCH_SKLADOWYCH_W_GRAFIE, CommonVariables.getInstance().CZY_WAGOWY, CommonVariables.getInstance().WAGI_ROWNE_JEDEN, CommonVariables.getInstance().WAGI_LOSOWE_BEZ_POWTORZEN, CommonVariables.getInstance().WAGI_LOSOWE_Z_POWTORZENIAMI);
 							System.out.println("	Wygenerowano graf numer [" + (j+1) + "]");
 							
 							for(int k=0; k<CommonVariables.getInstance().LICZBA_SERII_POMIAROW_DLA_JEDNEGO_ZADANIA; k++) {

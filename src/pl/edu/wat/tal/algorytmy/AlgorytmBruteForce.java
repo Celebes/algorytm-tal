@@ -227,7 +227,7 @@ public class AlgorytmBruteForce
         // -----------
         stHelper.stopCalculateComplexity();
 
-        results.append( "\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE\n" );
+        //results.append( "\nZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE\n" );
         System.out.println();
         System.out.println( "ZNALEZIONO ROZWIAZANIE W ALGORYTMIE BRUTE-FORCE" );
 
@@ -243,11 +243,10 @@ public class AlgorytmBruteForce
         }
         else
         {
-            results.append( "ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: "
-                            + optymalnyWagowoFVS.size() + "\n" );
-            results.append( "OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:" + "\n" );
-            results.append( optymalnyWagowoFVS + "\n" );
-            results.append( "SUMA JEGO WAG WYNOSI: " + minSumaWag + "\n" );
+            //results.append( "ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: " + optymalnyWagowoFVS.size() + "\n" );
+            //results.append( "OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:" + "\n" );
+            results.append("			Wynik Brute-Force: " + optymalnyWagowoFVS + ", suma wag: [" + minSumaWag + "]\n" );
+            //results.append( "SUMA JEGO WAG WYNOSI: " + minSumaWag + "\n" );
             System.out.println( "ROZMIAR OPTYMALNEGO POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO: "
                                 + optymalnyWagowoFVS.size() );
             System.out.println( "OPTYMALNY POD WZGLÊDEM MINIMALNEJ SUMY WAG [FVS] TO:" );

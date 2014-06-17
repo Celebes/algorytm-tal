@@ -156,7 +156,7 @@ public class Graf {
 
 	@Override
 	public String toString() {
-		return "Graf posiada " + this.wierzcholki.size() + " wierzcholkow: (" + this.wierzcholki + ") i " + this.krawedzie.size() + " krawedzi: (" + this.krawedzie + ")";
+		return "Graf posiada " + this.wierzcholki.size() + " V: (" + this.wierzcholki + ") i " + this.krawedzie.size() + " E: (" + this.krawedzie + ")";
 	}
 
 	public Graf klonuj() {
@@ -328,6 +328,16 @@ public class Graf {
 		}
 		
 		return false;
+	}
+
+	public void przyporzadkujLosoweWagiZPowtorzeniami() {
+		Random r = new Random();
+		
+		for(Wierzcholek w : wierzcholki) {
+			w.setWaga((double)(r.nextInt(wierzcholki.size()) + 1));
+		}
+		
+		this.wagowy = true;
 	}
 
 }
