@@ -552,6 +552,9 @@ public class App
 
                     // stAlgorithmsHelperForBF.startCalculateComplexity();
                     // long bytesStart = Runtime.getRuntime().freeMemory();
+                    double minSumaWagBF = 0.0;
+                    double minSumaWagL = 0.0;
+                    
                     if(CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE) {
                     	abf = new AlgorytmBruteForce( g );
                     	StringBuilder resAbf = abf.compute();
@@ -559,6 +562,8 @@ public class App
                     	long czas = abf.getCalculateComplexityWrapper();
                     	textArea.append("			Czas: " + czas + " [ns]\n");
                     	bfAlgorithmResults.get( j ).add( czas );
+                    	
+                    	minSumaWagBF = abf.getMinSumaWag();
                     }
                     
                     if(CommonVariables.getInstance().GENERUJ_ALGORYTM_WARSTWOWY) {
@@ -572,6 +577,23 @@ public class App
                     	long czas = al.getCalculateComplexityWrapper();
                     	textArea.append("			Czas: " + czas + " [ns]\n");
                     	layerAlgorithmResults.get( j ).add( czas );
+                    	
+                    	minSumaWagL = al.getMinSumaWag();
+                    }
+                    
+                    if(CommonVariables.getInstance().GENERUJ_ALGORYTM_BRUTE_FORCE && CommonVariables.getInstance().GENERUJ_ALGORYTM_WARSTWOWY) {
+                    	textArea.append("\n");
+                    	if(minSumaWagBF > minSumaWagL) {
+                    		double procent = ((minSumaWagBF/minSumaWagL)-1.0)*100.0;
+                    		procent = (double) Math.round(procent * 1000) / 1000;
+                    		textArea.append("			Algorytm Layering by³ lepszy od algorytmu Brute-Force o [" + (minSumaWagBF - minSumaWagL) + "], czyli by³ o " + procent + "% lepszy\n");
+                    	} else if(minSumaWagL > minSumaWagBF) {
+                    		double procent = ((minSumaWagL/minSumaWagBF)-1.0)*100.0;
+                    		procent = (double) Math.round(procent * 1000) / 1000;
+                    		textArea.append("			Algorytm Brute-Force by³ lepszy od algorytmu Layering o [" + (minSumaWagL - minSumaWagBF) + "], czyli by³ o " + procent + "% lepszy\n");
+                    	} else {
+                    		textArea.append("			Wyniki obu algorytmów by³y równie dobre\n");
+                    	}
                     }
                     
                     //results.append( resAbf.toString() );

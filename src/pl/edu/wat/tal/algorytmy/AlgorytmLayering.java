@@ -293,4 +293,14 @@ public class AlgorytmLayering
         return statisHelper.showResult();
     }
 
+	public double getMinSumaWag() {
+		return minSumaWag;
+	}
+
+	public void setMinSumaWag(double minSumaWag) {
+		this.minSumaWag = minSumaWag;
+	}
+    
+    
+
 }
